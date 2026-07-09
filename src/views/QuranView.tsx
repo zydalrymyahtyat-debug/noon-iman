@@ -20,6 +20,8 @@ const toArabicNumeral = (n: number) => {
   return n.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
 };
 
+let cachedMeta: any = null;
+
 export const QuranView: React.FC = () => {
   const [surahs, setSurahs] = useState<SurahReference[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,9 +32,11 @@ export const QuranView: React.FC = () => {
   useEffect(() => {
     const fetchSurahs = async () => {
       try {
-        const res = await fetch('https://api.alquran.cloud/v1/meta');
-        const json = await res.json();
-        setSurahs(json.data.surahs.references);
+        if (!cachedMeta) {
+          const res = await fetch('./data/meta.json');
+          cachedMeta = await res.json();
+        }
+        setSurahs(cachedMeta.data.surahs.references);
       } catch (error) {
         console.error('Failed to fetch surahs', error);
       } finally {
@@ -48,7 +52,7 @@ export const QuranView: React.FC = () => {
 
   return (
     <div className="relative h-full bg-slate-50 dark:bg-slate-950">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('/images/quran.jpg')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('./images/quran.jpg')" }}></div>
       <div className="relative z-10 p-4 space-y-6 h-full overflow-y-auto pb-24">
         <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
@@ -98,6 +102,9 @@ export const QuranView: React.FC = () => {
   );
 };
 
+let cachedQuran: any = null;
+let cachedTafsir: any = null;
+
 const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ surah, onBack }) => {
   const [quranData, setQuranData] = useState<Ayah[]>([]);
   const [tafsirData, setTafsirData] = useState<Ayah[]>([]);
@@ -108,10 +115,21 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
     const fetchSurah = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surah.number}/editions/quran-uthmani,ar.muyassar`);
-        const json = await res.json();
-        setQuranData(json.data[0].ayahs);
-        setTafsirData(json.data[1].ayahs);
+        if (!cachedQuran) {
+          const resQ = await fetch('./data/quran.json');
+          cachedQuran = await resQ.json();
+        }
+        if (!cachedTafsir) {
+          const resT = await fetch('./data/tafsir.json');
+          cachedTafsir = await resT.json();
+        }
+        
+        // Find surah in the array (array is 0-indexed, surah.number is 1-indexed)
+        const qSurah = cachedQuran.data.surahs[surah.number - 1];
+        const tSurah = cachedTafsir.data.surahs[surah.number - 1];
+        
+        setQuranData(qSurah.ayahs);
+        setTafsirData(tSurah.ayahs);
       } catch (error) {
         console.error('Failed to fetch surah content', error);
       } finally {
@@ -127,7 +145,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
 
   return (
     <div className="flex flex-col h-full relative bg-slate-50 dark:bg-slate-950">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('/images/quran.jpg')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('./images/quran.jpg')" }}></div>
       
       <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
         <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
