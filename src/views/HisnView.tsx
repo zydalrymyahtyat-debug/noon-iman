@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { morningAzkar, eveningAzkar } from '../data/azkar';
 import { cn } from '../lib/utils';
 import { requestNotificationPermissions, scheduleAzkarReminder } from '../lib/notifications';
+import { useHardwareBack } from '../hooks/useHardwareBack';
 
 export const HisnView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'morning_azkar' | 'evening_azkar'>('morning_azkar');
@@ -13,6 +14,8 @@ export const HisnView: React.FC = () => {
   const [timerHour, setTimerHour] = useState('06');
   const [timerMinute, setTimerMinute] = useState('00');
   const [notificationSuccess, setNotificationSuccess] = useState<string | null>(null);
+
+  useHardwareBack(showTimerModal, () => setShowTimerModal(false));
 
   React.useEffect(() => {
     if (activeTab === 'morning_azkar') {

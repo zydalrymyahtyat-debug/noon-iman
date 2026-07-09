@@ -45,9 +45,33 @@ export const SettingsView: React.FC = () => {
           </div>
           <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">نور الإيمان</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-4">الإصدار 1.0.0</p>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            تم استعادة الأقسام وإضافة قسم المكتبة. إذا كان هذا التطبيق قد تم استيراده من GitHub وتم مسح ملفاته السابقة بالخطأ، يمكنك إعادة استيراده، وسنقوم بتعديله بعناية.
-          </p>
+          <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed space-y-3 text-right">
+            <p>
+              نور وإيمان هو تطبيق إسلامي يهدف إلى نشر العلم الشرعي وتيسير الوصول إلى المحتوى الإسلامي الموثوق، من خلال واجهة عربية بسيطة وسهلة الاستخدام تناسب جميع الفئات.
+            </p>
+            <p>
+              يضم التطبيق مجموعة من الأقسام الإسلامية المفيدة، منها:
+            </p>
+            <ul className="list-disc list-inside space-y-1 pe-2 text-xs">
+              <li>القرآن الكريم.</li>
+              <li>كتاب الأصول الثلاثة.</li>
+              <li>كتاب الأربعين النووية.</li>
+              <li>كتاب الداء والدواء.</li>
+              <li>قسم علامات الساعة.</li>
+              <li>معلومات وفوائد إسلامية متنوعة.</li>
+            </ul>
+            <p>
+              نسعى إلى تطوير تطبيق نور وإيمان باستمرار وإضافة المزيد من الكتب والمزايا التي تعين المسلم على طلب العلم، وتعزز الوعي الديني بأسلوب سهل ومنظم.
+            </p>
+            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-1 text-xs">
+              <p className="font-bold text-slate-800 dark:text-slate-200">تطوير وبرمجة:</p>
+              <p className="text-teal-600 dark:text-teal-400 font-medium">زيد الريمي 770158410</p>
+              <p className="text-amber-600 dark:text-amber-500">لاتنسونا من خالص دعائكم</p>
+            </div>
+            <p className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-[10px] text-center opacity-80">
+              شكرًا لاستخدامكم تطبيق نور وإيمان. نرحب بجميع الملاحظات والاقتراحات التي تسهم في تطوير التطبيق، ونسأل الله أن يجعل هذا العمل خالصًا لوجهه الكريم، وأن ينفع به المسلمين، وأن يجعله في ميزان الحسنات.
+            </p>
+          </div>
         </div>
       </div>
     </div>

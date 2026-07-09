@@ -4,10 +4,13 @@ import type { Book as BookType } from '../data/library';
 import { books, signsOfHour } from '../data/library';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
+import { useHardwareBack } from '../hooks/useHardwareBack';
 
 export const LibraryView: React.FC = () => {
   const [activeSection, setActiveSection] = useState<'books' | 'signs'>('books');
   const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
+
+  useHardwareBack(!!selectedBook, () => setSelectedBook(null));
 
   if (selectedBook) {
     return (

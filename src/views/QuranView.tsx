@@ -1,22 +1,56 @@
-import React from 'react';
-import { BookOpen } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, ArrowRight, Loader2, Info } from 'lucide-react';
 import { motion } from 'motion/react';
+import { cn } from '../lib/utils';
+import { useHardwareBack } from '../hooks/useHardwareBack';
+
+interface SurahReference {
+  number: number;
+  name: string;
+  numberOfAyahs: number;
+  revelationType: string;
+}
+
+interface Ayah {
+  numberInSurah: number;
+  text: string;
+}
+
+const toArabicNumeral = (n: number) => {
+  return n.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+};
 
 export const QuranView: React.FC = () => {
-  const surahs = [
-    { id: 1, name: 'الفاتحة', type: 'مكية', verses: 7 },
-    { id: 2, name: 'البقرة', type: 'مدنية', verses: 286 },
-    { id: 3, name: 'آل عمران', type: 'مدنية', verses: 200 },
-    { id: 18, name: 'الكهف', type: 'مكية', verses: 110 },
-    { id: 36, name: 'يس', type: 'مكية', verses: 83 },
-    { id: 55, name: 'الرحمن', type: 'مدنية', verses: 78 },
-    { id: 56, name: 'الواقعة', type: 'مكية', verses: 96 },
-    { id: 67, name: 'الملك', type: 'مكية', verses: 30 },
-  ];
+  const [surahs, setSurahs] = useState<SurahReference[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSurah, setSelectedSurah] = useState<SurahReference | null>(null);
+
+  useHardwareBack(!!selectedSurah, () => setSelectedSurah(null));
+
+  useEffect(() => {
+    const fetchSurahs = async () => {
+      try {
+        const res = await fetch('https://api.alquran.cloud/v1/meta');
+        const json = await res.json();
+        setSurahs(json.data.surahs.references);
+      } catch (error) {
+        console.error('Failed to fetch surahs', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSurahs();
+  }, []);
+
+  if (selectedSurah) {
+    return <SurahReader surah={selectedSurah} onBack={() => setSelectedSurah(null)} />;
+  }
 
   return (
-    <div className="p-4 space-y-6 h-full overflow-y-auto pb-24">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="relative h-full bg-slate-50 dark:bg-slate-950">
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('/images/quran.jpg')" }}></div>
+      <div className="relative z-10 p-4 space-y-6 h-full overflow-y-auto pb-24">
+        <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
           <BookOpen className="w-6 h-6" />
         </div>
@@ -26,29 +60,131 @@ export const QuranView: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-3">
-        {surahs.map((surah, idx) => (
-          <motion.button
-            key={surah.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.05 }}
-            className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all active:scale-95"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-400 dark:text-slate-500 text-sm">
-                {surah.id}
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+        </div>
+      ) : (
+        <div className="grid gap-3">
+          {surahs.map((surah, idx) => (
+            <motion.button
+              key={surah.number}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: Math.min(idx * 0.02, 0.5) }}
+              onClick={() => setSelectedSurah(surah)}
+              className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all active:scale-95"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-400 dark:text-slate-500 text-sm">
+                  {surah.number}
+                </div>
+                <div className="text-right">
+                  <h3 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{surah.name}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • {surah.numberOfAyahs} آية
+                  </p>
+                </div>
               </div>
-              <div className="text-right">
-                <h3 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{surah.name}</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{surah.type} • {surah.verses} آية</p>
+              <div className="text-emerald-600 dark:text-emerald-500">
+                <BookOpen className="w-5 h-5 opacity-50" />
               </div>
+            </motion.button>
+          ))}
+        </div>
+      )}
+      </div>
+    </div>
+  );
+};
+
+const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ surah, onBack }) => {
+  const [quranData, setQuranData] = useState<Ayah[]>([]);
+  const [tafsirData, setTafsirData] = useState<Ayah[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showTafsir, setShowTafsir] = useState<{ [key: number]: boolean }>({});
+
+  useEffect(() => {
+    const fetchSurah = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surah.number}/editions/quran-uthmani,ar.muyassar`);
+        const json = await res.json();
+        setQuranData(json.data[0].ayahs);
+        setTafsirData(json.data[1].ayahs);
+      } catch (error) {
+        console.error('Failed to fetch surah content', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSurah();
+  }, [surah.number]);
+
+  const toggleTafsir = (ayahNum: number) => {
+    setShowTafsir(prev => ({ ...prev, [ayahNum]: !prev[ayahNum] }));
+  };
+
+  return (
+    <div className="flex flex-col h-full relative bg-slate-50 dark:bg-slate-950">
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('/images/quran.jpg')" }}></div>
+      
+      <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
+        <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+        </button>
+        <div className="text-center">
+          <h2 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">{surah.name}</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • {surah.numberOfAyahs} آية
+          </p>
+        </div>
+        <div className="w-10"></div>
+      </div>
+
+      <div className="relative z-10 flex-1 overflow-y-auto p-4 pb-24 space-y-6">
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+          </div>
+        ) : (
+          <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+            {surah.number !== 1 && surah.number !== 9 && (
+              <div className="text-center font-serif text-3xl text-slate-800 dark:text-slate-100 mb-8 font-[family:var(--font-quran)]">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+              </div>
+            )}
+            <div className="text-justify leading-[2.5]" style={{ direction: 'rtl' }}>
+              {quranData.map((ayah, idx) => (
+                <React.Fragment key={ayah.numberInSurah}>
+                  <span 
+                    className={cn(
+                      "cursor-pointer transition-colors text-[26px] sm:text-[28px] md:text-[32px] font-[family:var(--font-quran)]",
+                      showTafsir[ayah.numberInSurah] ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100 hover:text-emerald-600 dark:hover:text-emerald-500"
+                    )}
+                    onClick={() => toggleTafsir(ayah.numberInSurah)}
+                  >
+                    {ayah.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '')} 
+                    <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm sm:text-base font-sans font-bold mx-2 bg-emerald-50 dark:bg-emerald-900/20">
+                      {toArabicNumeral(ayah.numberInSurah)}
+                    </span>
+                  </span>
+
+                  {showTafsir[ayah.numberInSurah] && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="block w-full bg-emerald-50 dark:bg-emerald-900/10 p-4 sm:p-5 rounded-2xl text-slate-700 dark:text-slate-300 text-sm sm:text-base font-sans leading-relaxed border border-emerald-100 dark:border-emerald-900/30 my-4"
+                    >
+                      <div className="font-bold text-emerald-800 dark:text-emerald-400 mb-2 font-serif text-lg">التفسير الميسر:</div>
+                      {tafsirData[idx]?.text}
+                    </motion.div>
+                  )}
+                </React.Fragment>
+              ))}
             </div>
-            <div className="text-emerald-600 dark:text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
-              <BookOpen className="w-5 h-5" />
-            </div>
-          </motion.button>
-        ))}
+          </div>
+        )}
       </div>
     </div>
   );
