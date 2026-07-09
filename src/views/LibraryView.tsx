@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { Book, Clock, ChevronRight, Bookmark } from 'lucide-react';
-import type { Book as BookType } from '../data/library';
-import { books, signsOfHour } from '../data/library';
-import { cn } from '../lib/utils';
-import { motion, AnimatePresence } from 'motion/react';
-import { useHardwareBack } from '../hooks/useHardwareBack';
+import React, { useState } from "react";
+import { Book, Clock, ChevronRight, Bookmark } from "lucide-react";
+import type { Book as BookType } from "../data/library";
+import { books, signsOfHour } from "../data/library";
+import { cn } from "../lib/utils";
+import { motion, AnimatePresence } from "motion/react";
+import { useHardwareBack } from "../hooks/useHardwareBack";
 
 export const LibraryView: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<'books' | 'signs'>('books');
+  const [activeSection, setActiveSection] = useState<"books" | "signs">(
+    "books",
+  );
   const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
 
   useHardwareBack(!!selectedBook, () => setSelectedBook(null));
@@ -16,19 +18,21 @@ export const LibraryView: React.FC = () => {
     return (
       <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
         <div className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 flex items-center gap-4 z-10 border-b border-slate-200 dark:border-slate-800">
-          <button 
+          <button
             onClick={() => setSelectedBook(null)}
             className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <ChevronRight className="w-6 h-6 text-slate-700 dark:text-slate-300 rtl:rotate-180" />
           </button>
           <div className="flex-1">
-            <h2 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{selectedBook.title}</h2>
+            <h2 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">
+              {selectedBook.title}
+            </h2>
             <p className="text-xs text-slate-500">{selectedBook.author}</p>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-6 scroll-smooth">
-          <div 
+          <div
             className="font-serif leading-loose text-lg text-slate-800 dark:text-slate-200"
             dangerouslySetInnerHTML={{ __html: selectedBook.content }}
           />
@@ -41,24 +45,24 @@ export const LibraryView: React.FC = () => {
     <div className="p-4 space-y-6 pb-24 h-full overflow-y-auto">
       <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl">
         <button
-          onClick={() => setActiveSection('books')}
+          onClick={() => setActiveSection("books")}
           className={cn(
             "flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2",
-            activeSection === 'books' 
-              ? "bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-400 shadow-sm" 
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
+            activeSection === "books"
+              ? "bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-400 shadow-sm"
+              : "text-slate-500 dark:text-slate-400 hover:text-slate-700",
           )}
         >
           <Book className="w-4 h-4" />
           الكتب
         </button>
         <button
-          onClick={() => setActiveSection('signs')}
+          onClick={() => setActiveSection("signs")}
           className={cn(
             "flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2",
-            activeSection === 'signs' 
-              ? "bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-400 shadow-sm" 
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
+            activeSection === "signs"
+              ? "bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-400 shadow-sm"
+              : "text-slate-500 dark:text-slate-400 hover:text-slate-700",
           )}
         >
           <Clock className="w-4 h-4" />
@@ -67,7 +71,7 @@ export const LibraryView: React.FC = () => {
       </div>
 
       <AnimatePresence mode="wait">
-        {activeSection === 'books' ? (
+        {activeSection === "books" ? (
           <motion.div
             key="books"
             initial={{ opacity: 0, x: -20 }}
@@ -75,7 +79,7 @@ export const LibraryView: React.FC = () => {
             exit={{ opacity: 0, x: 20 }}
             className="grid gap-4"
           >
-            {books.map(book => (
+            {books.map((book) => (
               <button
                 key={book.id}
                 onClick={() => setSelectedBook(book)}
@@ -85,9 +89,15 @@ export const LibraryView: React.FC = () => {
                   <Bookmark className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg font-serif text-slate-800 dark:text-slate-100">{book.title}</h3>
-                  <p className="text-sm text-teal-600 dark:text-teal-500 font-medium my-1">{book.author}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{book.description}</p>
+                  <h3 className="font-bold text-lg font-serif text-slate-800 dark:text-slate-100">
+                    {book.title}
+                  </h3>
+                  <p className="text-sm text-teal-600 dark:text-teal-500 font-medium my-1">
+                    {book.author}
+                  </p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
+                    {book.description}
+                  </p>
                 </div>
               </button>
             ))}
@@ -101,7 +111,10 @@ export const LibraryView: React.FC = () => {
             className="space-y-6"
           >
             {signsOfHour.map((section, idx) => (
-              <div key={idx} className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+              <div
+                key={idx}
+                className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800"
+              >
                 <h3 className="text-xl font-bold font-serif text-teal-700 dark:text-teal-400 mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
                   {section.title}
                 </h3>
