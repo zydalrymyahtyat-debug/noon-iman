@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Heart, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Heart, X } from "lucide-react";
 
 export const WeeklyDialog: React.FC = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const lastShown = localStorage.getItem('weeklyDialogLastShown');
+    const lastShown = localStorage.getItem("weeklyDialogLastShown");
     const now = Date.now();
     // One week in ms = 7 * 24 * 60 * 60 * 1000 = 604800000
     if (!lastShown || now - parseInt(lastShown) > 604800000) {
       // Small delay for better UX
       const timer = setTimeout(() => setShow(true), 1500);
-      localStorage.setItem('weeklyDialogLastShown', now.toString());
+      localStorage.setItem("weeklyDialogLastShown", now.toString());
       return () => clearTimeout(timer);
     }
   }, []);
