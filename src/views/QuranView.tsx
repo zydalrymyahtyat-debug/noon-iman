@@ -52,7 +52,7 @@ export const QuranView: React.FC = () => {
 
   return (
     <div className="relative h-full bg-slate-50 dark:bg-slate-950">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('./images/quran.jpg')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: `url(${quranImg})` }}></div>
       <div className="relative z-10 p-4 space-y-6 h-full overflow-y-auto pb-24">
         <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
@@ -145,7 +145,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
 
   return (
     <div className="flex flex-col h-full relative bg-slate-50 dark:bg-slate-950">
-      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: "url('./images/quran.jpg')" }}></div>
+      <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-5 dark:opacity-10 pointer-events-none z-0" style={{ backgroundImage: `url(${quranImg})` }}></div>
       
       <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
         <button onClick={onBack} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
