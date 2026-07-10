@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, X } from 'lucide-react';
+import { useHardwareBack } from '../hooks/useHardwareBack';
 
 export const WeeklyDialog: React.FC = () => {
   const [show, setShow] = useState(false);
+  useHardwareBack(show, () => setShow(false));
 
   useEffect(() => {
     const lastShown = localStorage.getItem('weeklyDialogLastShown');

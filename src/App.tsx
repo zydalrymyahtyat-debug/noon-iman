@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
 import { Home, Book, BookOpen, Clock, Settings, Heart, CheckCircle2, Bookmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
@@ -35,7 +37,8 @@ const App: React.FC = () => {
         setShowExitToast(false);
       } else if (state && state.dummy) {
         if (exitPromptRef.current) {
-          window.history.back(); // Actually exit
+          // Actually exit
+          if (Capacitor.isNativePlatform()) { CapApp.exitApp(); } else { window.history.back(); } // Actually exit
         } else {
           exitPromptRef.current = true;
           setShowExitToast(true);
