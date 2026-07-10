@@ -13,7 +13,7 @@ import '@fontsource/tajawal/500.css';
 import '@fontsource/tajawal/700.css';
 import '@fontsource/noto-kufi-arabic';
 import '@fontsource/noto-kufi-arabic/700.css';
-import 'kfgqpc-uthmanic-script-hafs-regular/index.css';
+
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

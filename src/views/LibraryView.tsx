@@ -14,8 +14,8 @@ export const LibraryView: React.FC = () => {
 
   if (selectedBook) {
     return (
-      <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
-        <div className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 flex items-center gap-4 z-10 border-b border-slate-200 dark:border-slate-800">
+      <div className="fixed inset-0 z-50 flex flex-col bg-slate-50 dark:bg-slate-950">
+        <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800">
           <button 
             onClick={() => setSelectedBook(null)}
             className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"

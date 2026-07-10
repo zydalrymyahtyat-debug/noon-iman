@@ -1,6 +1,6 @@
 {
   "appId": "com.noor.eiman",
-  "appName": "Noor El-Eiman",
+  "appName": "نور الإيمان",
   "webDir": "dist",
   "bundledWebRuntime": false,
   "plugins": {

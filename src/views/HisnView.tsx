@@ -71,7 +71,7 @@ export const HisnView: React.FC = () => {
 
   if (selectedHisnCat) {
     return (
-      <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
+      <div className="fixed inset-0 z-50 flex flex-col bg-slate-50 dark:bg-slate-950">
         <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
           <button onClick={() => setSelectedHisnCat(null)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
             <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />

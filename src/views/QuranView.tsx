@@ -148,7 +148,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
   };
 
   return (
-    <div className="flex flex-col h-full relative bg-slate-50 dark:bg-slate-950">
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-50 dark:bg-slate-950">
       <img src={quranImg} alt="" className="fixed inset-0 w-full h-full object-cover opacity-5 dark:opacity-10 pointer-events-none z-0" />
       
       <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
@@ -172,7 +172,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
         ) : (
           <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
             {surah.number !== 1 && surah.number !== 9 && (
-              <div className="text-center font-serif text-3xl text-slate-800 dark:text-slate-100 mb-8 font-[family:var(--font-quran)]">
+              <div className="text-center text-3xl text-slate-800 dark:text-slate-100 mb-8 font-[family:var(--font-quran)]">
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
               </div>
             )}
