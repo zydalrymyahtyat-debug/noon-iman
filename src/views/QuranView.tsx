@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import quranImg from '../assets/images/quran.jpg';
+import { quranImg } from '../assets/image-data';
 import { BookOpen, ArrowRight, Loader2, Info } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';

@@ -1,11 +1,13 @@
 import React from 'react';
-import quranImg from '../assets/images/quran.jpg';
-import hisnImg from '../assets/images/hisn.jpg';
-import misbahaImg from '../assets/images/misbaha.jpg';
-import prayerImg from '../assets/images/prayer.jpg';
-import libraryImg from '../assets/images/library.jpg';
-import storiesImg from '../assets/images/stories.jpg';
-import bannerImg from '../assets/images/banner.jpg';
+import { 
+  quranImg, 
+  hisnImg, 
+  misbahaImg, 
+  prayerImg, 
+  libraryImg, 
+  storiesImg, 
+  bannerImg 
+} from '../assets/image-data';
 import { Book, Clock, Heart, CheckCircle2, Bookmark } from 'lucide-react';
 import { motion } from 'motion/react';
 
