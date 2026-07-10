@@ -35,7 +35,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         <img src={bannerImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 to-emerald-800/80"></div>
         <div className="relative z-10 p-8 text-white">
-          <h2 className="text-3xl font-bold font-serif mb-3">السلام عليكم</h2>
+          <h2 className="text-3xl font-bold font-kufi mb-3">السلام عليكم</h2>
           <p className="text-teal-50 font-medium text-lg opacity-90 max-w-sm">مرحباً بك في تطبيق نور الإيمان. اختر القسم الذي تريده من القائمة.</p>
         </div>
       </motion.div>

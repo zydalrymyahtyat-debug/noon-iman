@@ -20,7 +20,7 @@ export const MisbahaView: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 space-y-12">
       <div className="text-center space-y-4">
-        <h2 className="text-3xl font-bold font-serif text-teal-700 dark:text-teal-400">المسبحة الإلكترونية</h2>
+        <h2 className="text-3xl font-bold font-kufi text-teal-700 dark:text-teal-400">المسبحة الإلكترونية</h2>
         <p className="text-slate-500 dark:text-slate-400">ألا بذكر الله تطمئن القلوب</p>
       </div>
 

@@ -10,7 +10,7 @@ export const SettingsView: React.FC = () => {
           <Settings className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold font-serif text-slate-800 dark:text-slate-100">الإعدادات</h2>
+          <h2 className="text-2xl font-bold font-kufi text-slate-800 dark:text-slate-100">الإعدادات</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">تخصيص التطبيق</p>
         </div>
       </div>

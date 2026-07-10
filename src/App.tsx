@@ -91,7 +91,7 @@ const App: React.FC = () => {
       </AnimatePresence>
 
       <header className="h-16 shrink-0 flex items-center justify-between px-4 bg-white dark:bg-slate-900 shadow-sm z-10 relative">
-        <h1 className="text-xl font-bold text-teal-600 dark:text-teal-400 font-serif">نور الإيمان</h1>
+        <h1 className="text-xl font-bold text-teal-600 dark:text-teal-400 font-kufi">نور الإيمان</h1>
         <button onClick={() => navigateTo('settings')} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>

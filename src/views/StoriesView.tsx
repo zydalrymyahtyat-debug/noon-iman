@@ -118,11 +118,11 @@ export const StoriesView: React.FC = () => {
           <button onClick={() => setSelectedStory(null)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
             <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </button>
-          <h2 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">{story?.title}</h2>
+          <h2 className="text-xl font-bold font-kufi text-slate-800 dark:text-slate-100">{story?.title}</h2>
         </div>
         <div className="p-6 overflow-y-auto pb-24">
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
-            <p className="text-lg leading-[2.2] text-slate-700 dark:text-slate-300 font-serif whitespace-pre-wrap text-justify">
+            <p className="text-lg leading-[2.2] text-slate-700 dark:text-slate-300 font-kufi whitespace-pre-wrap text-justify">
               {story?.content}
             </p>
           </div>
@@ -138,7 +138,7 @@ export const StoriesView: React.FC = () => {
           <BookOpen className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold font-serif text-slate-800 dark:text-slate-100">قصص الأنبياء</h2>
+          <h2 className="text-2xl font-bold font-kufi text-slate-800 dark:text-slate-100">قصص الأنبياء</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">عبر وعظات من سير الأنبياء الموسعة</p>
         </div>
       </div>
@@ -154,7 +154,7 @@ export const StoriesView: React.FC = () => {
             className="bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 cursor-pointer hover:shadow-md hover:border-rose-200 dark:hover:border-rose-900 transition-all active:scale-95 group"
           >
             <div className="flex justify-between items-center mb-2">
-              <h3 className="font-bold text-lg font-serif text-slate-800 dark:text-slate-100 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+              <h3 className="font-bold text-lg font-kufi text-slate-800 dark:text-slate-100 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
                 {story.title}
               </h3>
               <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-rose-50 dark:group-hover:bg-rose-900/20 group-hover:text-rose-500 transition-colors">

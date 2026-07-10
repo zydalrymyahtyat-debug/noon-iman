@@ -106,7 +106,7 @@ export const PrayerView: React.FC = () => {
         <div className="absolute -end-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
         <div className="relative z-10 flex flex-col items-center text-center space-y-2">
           <MapPin className="w-8 h-8 opacity-80" />
-          <h2 className="text-2xl font-bold font-serif">{locationName}</h2>
+          <h2 className="text-2xl font-bold font-kufi">{locationName}</h2>
           <p className="text-indigo-100 font-medium">
             {new Intl.DateTimeFormat('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(new Date())}
           </p>

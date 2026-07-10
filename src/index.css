@@ -9,10 +9,10 @@
 }
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Amiri", "Tajawal", serif;
+  --font-sans: "Inter", "Noto Kufi Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Noto Kufi Arabic", serif;
   --font-kufi: "Noto Kufi Arabic", sans-serif;
-  --font-quran: 'KFGQPCHafs', "Amiri Quran", serif;
+  --font-quran: 'KFGQPCHafs', serif;
 }
 
 body {

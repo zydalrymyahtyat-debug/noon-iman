@@ -77,14 +77,14 @@ export const HisnView: React.FC = () => {
             <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
           </button>
           <div className="text-center">
-            <h2 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">{selectedHisnCat.title}</h2>
+            <h2 className="text-xl font-bold font-kufi text-slate-800 dark:text-slate-100">{selectedHisnCat.title}</h2>
           </div>
           <div className="w-10"></div>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth">
           {selectedHisnCat.items.map((item, idx) => (
             <div key={idx} className="p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-              <p className="text-xl leading-loose text-center font-serif text-slate-800 dark:text-slate-100">
+              <p className="text-xl leading-loose text-center font-kufi text-slate-800 dark:text-slate-100">
                 {item.text}
               </p>
             </div>
@@ -177,7 +177,7 @@ export const HisnView: React.FC = () => {
                       <BookOpen className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{cat.title}</h3>
+                      <h3 className="font-bold font-kufi text-lg text-slate-800 dark:text-slate-100">{cat.title}</h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400">{cat.items.length} ذكر</p>
                     </div>
                   </div>
@@ -212,7 +212,7 @@ export const HisnView: React.FC = () => {
                       </div>
                     )}
                     <p className={cn(
-                      "text-xl leading-loose text-center mb-6 font-serif relative z-10 transition-colors",
+                      "text-xl leading-loose text-center mb-6 font-kufi relative z-10 transition-colors",
                       isDone ? "text-teal-800 dark:text-teal-300" : "text-slate-800 dark:text-slate-100"
                     )}>
                       {zikr.text}
@@ -259,7 +259,7 @@ export const HisnView: React.FC = () => {
                 <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600 dark:text-teal-400">
                   <Bell className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">
+                <h3 className="text-xl font-bold font-kufi text-slate-800 dark:text-slate-100">
                   منبه {activeTab === 'morning_azkar' ? 'أذكار الصباح' : 'أذكار المساء'}
                 </h3>
                 <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">

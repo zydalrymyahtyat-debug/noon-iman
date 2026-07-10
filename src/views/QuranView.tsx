@@ -60,7 +60,7 @@ export const QuranView: React.FC = () => {
           <BookOpen className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold font-serif text-slate-800 dark:text-slate-100">القرآن الكريم</h2>
+          <h2 className="text-2xl font-bold font-kufi text-slate-800 dark:text-slate-100">القرآن الكريم</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">فهرس السور</p>
         </div>
       </div>
@@ -85,7 +85,7 @@ export const QuranView: React.FC = () => {
                   {surah.number}
                 </div>
                 <div className="text-right">
-                  <h3 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{surah.name}</h3>
+                  <h3 className="font-bold font-kufi text-lg text-slate-800 dark:text-slate-100">{surah.name}</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
                     {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • {surah.numberOfAyahs} آية
                   </p>
@@ -156,7 +156,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
           <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
         </button>
         <div className="text-center">
-          <h2 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">{surah.name}</h2>
+          <h2 className="text-xl font-bold font-kufi text-slate-800 dark:text-slate-100">{surah.name}</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • {surah.numberOfAyahs} آية
           </p>
@@ -172,7 +172,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
         ) : (
           <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
             {surah.number !== 1 && surah.number !== 9 && (
-              <div className="text-center text-3xl text-slate-800 dark:text-slate-100 mb-8 font-[family:var(--font-quran)]">
+              <div className="text-center text-3xl text-slate-800 dark:text-slate-100 mb-8 font-quran">
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
               </div>
             )}
@@ -181,7 +181,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
                 <React.Fragment key={ayah.numberInSurah}>
                   <span 
                     className={cn(
-                      "cursor-pointer transition-colors text-[26px] sm:text-[28px] md:text-[32px] font-[family:var(--font-quran)]",
+                      "cursor-pointer transition-colors text-[26px] sm:text-[28px] md:text-[32px] font-quran",
                       showTafsir[ayah.numberInSurah] ? "text-emerald-700 dark:text-emerald-400" : "text-slate-800 dark:text-slate-100 hover:text-emerald-600 dark:hover:text-emerald-500"
                     )}
                     onClick={() => toggleTafsir(ayah.numberInSurah)}
@@ -198,7 +198,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
                       animate={{ opacity: 1, height: 'auto' }}
                       className="block w-full bg-emerald-50 dark:bg-emerald-900/10 p-4 sm:p-5 rounded-2xl text-slate-700 dark:text-slate-300 text-sm sm:text-base font-sans leading-relaxed border border-emerald-100 dark:border-emerald-900/30 my-4"
                     >
-                      <div className="font-bold text-emerald-800 dark:text-emerald-400 mb-2 font-serif text-lg">التفسير الميسر:</div>
+                      <div className="font-bold text-emerald-800 dark:text-emerald-400 mb-2 font-kufi text-lg">التفسير الميسر:</div>
                       {tafsirData[idx]?.text}
                     </motion.div>
                   )}

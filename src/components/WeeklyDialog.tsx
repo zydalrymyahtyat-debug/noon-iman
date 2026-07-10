@@ -38,7 +38,7 @@ export const WeeklyDialog: React.FC = () => {
             <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-500">
               <Heart className="w-8 h-8 fill-current" />
             </div>
-            <p className="text-lg font-bold font-serif text-slate-800 dark:text-slate-100 leading-loose">
+            <p className="text-lg font-bold font-kufi text-slate-800 dark:text-slate-100 leading-loose">
               هذا التطبيق صدقة جارية من فاعلة خير لا تنسونا من خالص دعائكم
             </p>
             <button

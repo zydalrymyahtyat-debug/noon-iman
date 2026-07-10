@@ -23,13 +23,13 @@ export const LibraryView: React.FC = () => {
             <ChevronRight className="w-6 h-6 text-slate-700 dark:text-slate-300 rtl:rotate-180" />
           </button>
           <div className="flex-1">
-            <h2 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{selectedBook.title}</h2>
+            <h2 className="font-bold font-kufi text-lg text-slate-800 dark:text-slate-100">{selectedBook.title}</h2>
             <p className="text-xs text-slate-500">{selectedBook.author}</p>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-6 scroll-smooth">
           <div 
-            className="font-serif leading-loose text-lg text-slate-800 dark:text-slate-200"
+            className="font-kufi leading-loose text-lg text-slate-800 dark:text-slate-200"
             dangerouslySetInnerHTML={{ __html: selectedBook.content }}
           />
         </div>
@@ -85,7 +85,7 @@ export const LibraryView: React.FC = () => {
                   <Bookmark className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg font-serif text-slate-800 dark:text-slate-100">{book.title}</h3>
+                  <h3 className="font-bold text-lg font-kufi text-slate-800 dark:text-slate-100">{book.title}</h3>
                   <p className="text-sm text-teal-600 dark:text-teal-500 font-medium my-1">{book.author}</p>
                   <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2">{book.description}</p>
                 </div>
@@ -102,7 +102,7 @@ export const LibraryView: React.FC = () => {
           >
             {signsOfHour.map((section, idx) => (
               <div key={idx} className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
-                <h3 className="text-xl font-bold font-serif text-teal-700 dark:text-teal-400 mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 className="text-xl font-bold font-kufi text-teal-700 dark:text-teal-400 mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
                   {section.title}
                 </h3>
                 <ul className="space-y-3">
