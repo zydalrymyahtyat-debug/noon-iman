@@ -3,10 +3,11 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Amiri", "Tajawal", serif;
-  --font-quran: "Amiri Quran", serif;
+  --font-kufi: "Noto Kufi Arabic", sans-serif;
+  --font-quran: "Arabic", "Amiri Quran", serif;
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-kufi);
   background-color: #f8fafc;
 }
