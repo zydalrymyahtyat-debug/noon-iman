@@ -30,7 +30,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         animate={{ opacity: 1, y: 0 }}
         className="relative rounded-3xl overflow-hidden shadow-lg"
       >
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${bannerImg})` }}></div>
+        <img src={bannerImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 to-emerald-800/80"></div>
         <div className="relative z-10 p-8 text-white">
           <h2 className="text-3xl font-bold font-serif mb-3">السلام عليكم</h2>
@@ -48,15 +48,17 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             onClick={() => onNavigate(card.id)}
             className="group relative rounded-2xl overflow-hidden shadow-sm flex flex-col hover:shadow-md transition-all active:scale-95 text-right h-40"
           >
-            <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url('${card.image}')` }}></div>
+            <img src={card.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
             
-            <div className="relative z-10 p-4 flex flex-col h-full justify-end">
-              <div className={`w-10 h-10 rounded-xl ${card.color} text-white flex items-center justify-center shadow-sm mb-2 opacity-90`}>
+            <div className="relative z-10 p-4 flex flex-col h-full justify-end w-full">
+              <div className={`w-10 h-10 rounded-xl ${card.color} text-white flex items-center justify-center shadow-sm mb-auto opacity-90`}>
                 {card.icon}
               </div>
-              <h3 className="font-bold text-white text-lg leading-tight mb-1">{card.title}</h3>
-              <p className="text-xs text-slate-300 opacity-90">{card.desc}</p>
+              <div className="mt-auto">
+                <h3 className="font-bold text-white text-lg leading-tight mb-1">{card.title}</h3>
+                <p className="text-xs text-white/80 font-medium">{card.desc}</p>
+              </div>
             </div>
           </motion.button>
         ))}
