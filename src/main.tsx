@@ -13,17 +13,6 @@ import "@fontsource/tajawal/500.css";
 import "@fontsource/tajawal/700.css";
 import "./index.css";
 
-import { registerSW } from "virtual:pwa-register";
-
-const updateSW = registerSW({
-  onNeedRefresh() {
-    // Optionally alert the user that a new version is available
-  },
-  onOfflineReady() {
-    // App is ready to work offline
-  },
-});
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <App />
