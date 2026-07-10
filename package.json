@@ -21,6 +21,7 @@
     "@fontsource/inter": "^5.2.8",
     "@fontsource/noto-kufi-arabic": "^5.2.9",
     "@fontsource/tajawal": "^5.2.7",
+    "@kazishariar/nawawi-40-hadith-data": "^1.0.3",
     "adhan": "^4.4.4",
     "clsx": "^2.1.1",
     "kfgqpc-uthmanic-script-hafs-regular": "^1.0.0",

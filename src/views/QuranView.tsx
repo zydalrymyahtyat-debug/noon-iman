@@ -116,18 +116,20 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
     const fetchSurah = async () => {
       setLoading(true);
       try {
-        if (!cachedQuran) {
-          const resQ = await fetch('./data/quran.json');
-          cachedQuran = await resQ.json();
+        if (!cachedQuran) cachedQuran = {};
+        if (!cachedTafsir) cachedTafsir = {};
+
+        if (!cachedQuran[surah.number]) {
+          const resQ = await fetch(`./data/quran/${surah.number}.json`);
+          cachedQuran[surah.number] = await resQ.json();
         }
-        if (!cachedTafsir) {
-          const resT = await fetch('./data/tafsir.json');
-          cachedTafsir = await resT.json();
+        if (!cachedTafsir[surah.number]) {
+          const resT = await fetch(`./data/tafsir/${surah.number}.json`);
+          cachedTafsir[surah.number] = await resT.json();
         }
         
-        // Find surah in the array (array is 0-indexed, surah.number is 1-indexed)
-        const qSurah = cachedQuran.data.surahs[surah.number - 1];
-        const tSurah = cachedTafsir.data.surahs[surah.number - 1];
+        const qSurah = cachedQuran[surah.number];
+        const tSurah = cachedTafsir[surah.number];
         
         setQuranData(qSurah.ayahs);
         setTafsirData(tSurah.ayahs);
@@ -137,6 +139,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
         setLoading(false);
       }
     };
+
     fetchSurah();
   }, [surah.number]);
 
@@ -183,7 +186,7 @@ const SurahReader: React.FC<{ surah: SurahReference; onBack: () => void }> = ({ 
                     )}
                     onClick={() => toggleTafsir(ayah.numberInSurah)}
                   >
-                    {ayah.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '')} 
+                    {surah.number === 1 ? ayah.text : ayah.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ', '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '')} 
                     <span className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-sm sm:text-base font-sans font-bold mx-2 bg-emerald-50 dark:bg-emerald-900/20">
                       {toArabicNumeral(ayah.numberInSurah)}
                     </span>

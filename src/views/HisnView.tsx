@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, Check, Sparkles, Bell, X } from 'lucide-react';
+import { Play, Pause, RotateCcw, Check, Sparkles, Bell, X, BookOpen, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { morningAzkar, eveningAzkar } from '../data/azkar';
+import { hisnCategories, type HisnCategory } from '../data/hisn';
 import { cn } from '../lib/utils';
 import { requestNotificationPermissions, scheduleAzkarReminder } from '../lib/notifications';
 import { useHardwareBack } from '../hooks/useHardwareBack';
 
 export const HisnView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'morning_azkar' | 'evening_azkar'>('morning_azkar');
+  const [activeTab, setActiveTab] = useState<'morning_azkar' | 'evening_azkar' | 'hisn_muslim'>('morning_azkar');
   const [azkar, setAzkar] = useState(morningAzkar.map(z => ({ ...z, current: z.count })));
   
   const [showTimerModal, setShowTimerModal] = useState(false);
@@ -15,13 +16,18 @@ export const HisnView: React.FC = () => {
   const [timerMinute, setTimerMinute] = useState('00');
   const [notificationSuccess, setNotificationSuccess] = useState<string | null>(null);
 
+  const [selectedHisnCat, setSelectedHisnCat] = useState<HisnCategory | null>(null);
+
   useHardwareBack(showTimerModal, () => setShowTimerModal(false));
+  useHardwareBack(!!selectedHisnCat, () => setSelectedHisnCat(null));
 
   React.useEffect(() => {
     if (activeTab === 'morning_azkar') {
       setAzkar(morningAzkar.map(z => ({ ...z, current: z.count })));
+      setSelectedHisnCat(null);
     } else if (activeTab === 'evening_azkar') {
       setAzkar(eveningAzkar.map(z => ({ ...z, current: z.count })));
+      setSelectedHisnCat(null);
     }
   }, [activeTab]);
 
@@ -36,7 +42,6 @@ export const HisnView: React.FC = () => {
       setTimeout(() => setNotificationSuccess(null), 3000);
       return;
     }
-
     const type = activeTab === 'morning_azkar' ? 'morning' : 'evening';
     const success = await scheduleAzkarReminder(type, parseInt(timerHour), parseInt(timerMinute));
     
@@ -64,6 +69,31 @@ export const HisnView: React.FC = () => {
   const done = azkar.reduce((acc, curr) => acc + (curr.count - curr.current), 0);
   const progress = total > 0 ? (done / total) * 100 : 0;
 
+  if (selectedHisnCat) {
+    return (
+      <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
+        <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between">
+          <button onClick={() => setSelectedHisnCat(null)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+          </button>
+          <div className="text-center">
+            <h2 className="text-xl font-bold font-serif text-slate-800 dark:text-slate-100">{selectedHisnCat.title}</h2>
+          </div>
+          <div className="w-10"></div>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-24 scroll-smooth">
+          {selectedHisnCat.items.map((item, idx) => (
+            <div key={idx} className="p-5 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+              <p className="text-xl leading-loose text-center font-serif text-slate-800 dark:text-slate-100">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950">
       <div className="p-4 bg-white dark:bg-slate-900 shadow-sm z-10 shrink-0">
@@ -90,81 +120,122 @@ export const HisnView: React.FC = () => {
           >
             أذكار المساء
           </button>
-        </div>
-
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{activeTab === 'morning_azkar' ? 'أذكار الصباح' : 'أذكار المساء'}</h2>
-              <button 
-                onClick={() => setShowTimerModal(true)}
-                className="p-1.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300 hover:bg-teal-200 dark:hover:bg-teal-800 transition-colors"
-              >
-                <Bell className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="w-full max-w-xs bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div className="bg-teal-500 h-full transition-all duration-300" style={{ width: `\${progress}%` }}></div>
-            </div>
-          </div>
-          <button onClick={reset} className="p-2 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-            <RotateCcw className="w-5 h-5" />
+          <button
+            onClick={() => setActiveTab('hisn_muslim')}
+            className={cn(
+              "flex-1 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all",
+              activeTab === 'hisn_muslim' 
+                ? "bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-400 shadow-sm" 
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-700"
+            )}
+          >
+            حصن المسلم
           </button>
         </div>
+
+        {activeTab !== 'hisn_muslim' && (
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{activeTab === 'morning_azkar' ? 'أذكار الصباح' : 'أذكار المساء'}</h2>
+                <button 
+                  onClick={() => setShowTimerModal(true)}
+                  className="p-1.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300 hover:bg-teal-200 dark:hover:bg-teal-800 transition-colors"
+                >
+                  <Bell className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="w-full max-w-xs bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div className="bg-teal-500 h-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+              </div>
+            </div>
+            <button onClick={reset} className="p-2 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+              <RotateCcw className="w-5 h-5" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24 scroll-smooth scrollbar-hide">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={`azkar_\${activeTab}`}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="space-y-4"
-          >
-            {azkar.map((zikr) => {
-              const isDone = zikr.current === 0;
-              return (
-                <motion.div
-                  key={zikr.id}
-                  layout
-                  onClick={() => handleTap(zikr.id)}
-                  className={cn(
-                    "p-5 rounded-2xl shadow-sm border transition-all cursor-pointer relative overflow-hidden select-none",
-                    isDone 
-                      ? "bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800/50 opacity-70 scale-[0.98]" 
-                      : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:shadow-md"
-                  )}
+          {activeTab === 'hisn_muslim' ? (
+            <motion.div
+              key="hisn_muslim"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="grid gap-3"
+            >
+              {hisnCategories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedHisnCat(cat)}
+                  className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all active:scale-95 text-right w-full"
                 >
-                  {isDone && (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
-                      <Check className="w-32 h-32 text-teal-500" />
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0">
+                      <BookOpen className="w-5 h-5" />
                     </div>
-                  )}
-                  <p className={cn(
-                    "text-xl leading-loose text-center mb-6 font-serif relative z-10 transition-colors",
-                    isDone ? "text-teal-800 dark:text-teal-300" : "text-slate-800 dark:text-slate-100"
-                  )}>
-                    {zikr.text}
-                  </p>
-                  
-                  <div className="flex justify-between items-center relative z-10 mt-4">
-                    <span className="text-sm font-bold text-slate-500 bg-slate-100 dark:bg-slate-700/50 px-4 py-1.5 rounded-full">
-                      التكرار: {zikr.count}
-                    </span>
-                    <div className={cn(
-                      "w-14 h-14 rounded-full flex items-center justify-center font-bold text-2xl transition-all shadow-inner",
-                      isDone 
-                        ? "bg-teal-500 text-white shadow-teal-500/50" 
-                        : "bg-slate-100 dark:bg-slate-700 text-teal-600 dark:text-teal-400"
-                    )}>
-                      {isDone ? <Check className="w-6 h-6" /> : zikr.current}
+                    <div>
+                      <h3 className="font-bold font-serif text-lg text-slate-800 dark:text-slate-100">{cat.title}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{cat.items.length} ذكر</p>
                     </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                </button>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`azkar_${activeTab}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="space-y-4"
+            >
+              {azkar.map((zikr) => {
+                const isDone = zikr.current === 0;
+                return (
+                  <motion.div
+                    key={zikr.id}
+                    layout
+                    onClick={() => handleTap(zikr.id)}
+                    className={cn(
+                      "p-5 rounded-2xl shadow-sm border transition-all cursor-pointer relative overflow-hidden select-none",
+                      isDone 
+                        ? "bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800/50 opacity-70 scale-[0.98]" 
+                        : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:shadow-md"
+                    )}
+                  >
+                    {isDone && (
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+                        <Check className="w-32 h-32 text-teal-500" />
+                      </div>
+                    )}
+                    <p className={cn(
+                      "text-xl leading-loose text-center mb-6 font-serif relative z-10 transition-colors",
+                      isDone ? "text-teal-800 dark:text-teal-300" : "text-slate-800 dark:text-slate-100"
+                    )}>
+                      {zikr.text}
+                    </p>
+                    
+                    <div className="flex justify-between items-center relative z-10 mt-4">
+                      <span className="text-sm font-bold text-slate-500 bg-slate-100 dark:bg-slate-700/50 px-4 py-1.5 rounded-full">
+                        التكرار: {zikr.count}
+                      </span>
+                      <div className={cn(
+                        "w-14 h-14 rounded-full flex items-center justify-center font-bold text-2xl transition-all shadow-inner",
+                        isDone 
+                          ? "bg-teal-500 text-white shadow-teal-500/50" 
+                          : "bg-slate-100 dark:bg-slate-700 text-teal-600 dark:text-teal-400"
+                      )}>
+                        {isDone ? <Check className="w-6 h-6" /> : zikr.current}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
