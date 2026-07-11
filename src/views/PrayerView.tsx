@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Moon, Sun, Clock, MapPin, Bell, Loader2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Coordinates, CalculationMethod, PrayerTimes } from 'adhan';
+import { cn } from '../lib/utils';
 import { schedulePrayerReminder, requestNotificationPermissions } from '../lib/notifications';
 
 export const PrayerView: React.FC = () => {
@@ -96,6 +97,9 @@ export const PrayerView: React.FC = () => {
     { name: 'العشاء', time: prayerTimes.isha, icon: <Moon className="w-5 h-5 text-indigo-600" /> },
   ];
 
+  const now = new Date();
+  const nextPrayerIndex = prayersList.findIndex(p => p.time > now);
+
   return (
     <div className="p-4 space-y-6 pb-24 h-full overflow-y-auto">
       <motion.div 
@@ -134,25 +138,45 @@ export const PrayerView: React.FC = () => {
       )}
 
       <div className="space-y-3">
-        {prayersList.map((prayer, idx) => (
-          <motion.div
-            key={prayer.name}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800">
-                {prayer.icon}
+        {prayersList.map((prayer, idx) => {
+          const isNext = idx === nextPrayerIndex;
+          return (
+            <motion.div
+              key={prayer.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className={cn(
+                "flex items-center justify-between p-5 rounded-2xl shadow-sm border transition-all",
+                isNext
+                  ? "bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800/50"
+                  : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800"
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-12 h-12 flex items-center justify-center rounded-xl",
+                  isNext ? "bg-teal-100 dark:bg-teal-900/50" : "bg-slate-50 dark:bg-slate-800"
+                )}>
+                  {prayer.icon}
+                </div>
+                <div>
+                  <span className={cn(
+                    "text-lg font-bold",
+                    isNext ? "text-teal-800 dark:text-teal-300" : "text-slate-800 dark:text-slate-100"
+                  )}>{prayer.name}</span>
+                  {isNext && <p className="text-xs text-teal-600 dark:text-teal-400 font-bold">الصلاة القادمة</p>}
+                </div>
               </div>
-              <span className="text-lg font-bold text-slate-800 dark:text-slate-100">{prayer.name}</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-bold font-sans text-xl" dir="ltr">
-              {formatTime(prayer.time)}
-            </div>
-          </motion.div>
-        ))}
+              <div className={cn(
+                "flex items-center gap-2 font-bold font-sans text-xl",
+                isNext ? "text-teal-700 dark:text-teal-400" : "text-slate-600 dark:text-slate-300"
+              )} dir="ltr">
+                {formatTime(prayer.time)}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );

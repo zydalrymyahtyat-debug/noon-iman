@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, Check, Sparkles, Bell, X, BookOpen, ArrowRight } from 'lucide-react';
+import { Play, Pause, RotateCcw, Check, Sparkles, Bell, X, BookOpen, ArrowRight, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { morningAzkar, eveningAzkar } from '../data/azkar';
 import { hisnCategories, type HisnCategory } from '../data/hisn';
@@ -17,6 +17,11 @@ export const HisnView: React.FC = () => {
   const [notificationSuccess, setNotificationSuccess] = useState<string | null>(null);
 
   const [selectedHisnCat, setSelectedHisnCat] = useState<HisnCategory | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredHisnCategories = hisnCategories.filter(cat =>
+    cat.title.includes(searchQuery)
+  );
 
   useHardwareBack(showTimerModal, () => setShowTimerModal(false));
   useHardwareBack(!!selectedHisnCat, () => setSelectedHisnCat(null));
@@ -166,7 +171,19 @@ export const HisnView: React.FC = () => {
               exit={{ opacity: 0, x: 20 }}
               className="grid gap-3"
             >
-              {hisnCategories.map((cat, idx) => (
+              <div className="relative mb-2">
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-3 pr-10 py-3 border border-slate-200 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition-colors text-slate-900 dark:text-slate-100 shadow-sm"
+                  placeholder="ابحث في حصن المسلم..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              {filteredHisnCategories.map((cat, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedHisnCat(cat)}

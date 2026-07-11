@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { quranImg } from '../assets/image-data';
-import { BookOpen, ArrowRight, Loader2, Info } from 'lucide-react';
+import { BookOpen, ArrowRight, Loader2, Info, Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';
 import { useHardwareBack } from '../hooks/useHardwareBack';
@@ -18,13 +18,14 @@ interface Ayah {
 }
 
 const toArabicNumeral = (n: number) => {
-  return n.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
+  return n.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d, 10)] as string);
 };
 
 let cachedMeta: any = null;
 
 export const QuranView: React.FC = () => {
   const [surahs, setSurahs] = useState<SurahReference[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedSurah, setSelectedSurah] = useState<SurahReference | null>(null);
 
@@ -47,6 +48,10 @@ export const QuranView: React.FC = () => {
     fetchSurahs();
   }, []);
 
+  const filteredSurahs = surahs.filter(surah =>
+    surah.name.includes(searchQuery) || surah.number.toString().includes(searchQuery)
+  );
+
   if (selectedSurah) {
     return <SurahReader surah={selectedSurah} onBack={() => setSelectedSurah(null)} />;
   }
@@ -56,14 +61,27 @@ export const QuranView: React.FC = () => {
       <img src={quranImg} alt="" className="fixed inset-0 w-full h-full object-cover opacity-5 dark:opacity-10 pointer-events-none z-0" />
       <div className="relative z-10 p-4 space-y-6 h-full overflow-y-auto pb-24">
         <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-          <BookOpen className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <BookOpen className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold font-kufi text-slate-800 dark:text-slate-100">القرآن الكريم</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">فهرس السور</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold font-kufi text-slate-800 dark:text-slate-100">القرآن الكريم</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">فهرس السور</p>
+
+        <div className="relative mb-6">
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-slate-400" />
+          </div>
+          <input
+            type="text"
+            className="block w-full pl-3 pr-10 py-3 border border-slate-200 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors text-slate-900 dark:text-slate-100 shadow-sm"
+            placeholder="ابحث عن سورة..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-      </div>
 
       {loading ? (
         <div className="flex justify-center py-20">
@@ -71,7 +89,7 @@ export const QuranView: React.FC = () => {
         </div>
       ) : (
         <div className="grid gap-3">
-          {surahs.map((surah, idx) => (
+          {filteredSurahs.map((surah, idx) => (
             <motion.button
               key={surah.number}
               initial={{ opacity: 0, y: 10 }}
