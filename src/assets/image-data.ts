@@ -1,7 +1,15 @@
-export const quranImg = "/img/quran.jpg";
-export const hisnImg = "/img/hisn.jpg";
-export const misbahaImg = "/img/misbaha.jpg";
-export const prayerImg = "/img/prayer.jpg";
-export const libraryImg = "/img/library.jpg";
-export const storiesImg = "/img/stories.jpg";
-export const bannerImg = "/img/banner.jpg";
+import quran from './img/quran.jpg';
+import hisn from './img/hisn.jpg';
+import misbaha from './img/misbaha.jpg';
+import prayer from './img/prayer.jpg';
+import library from './img/library.jpg';
+import stories from './img/stories.jpg';
+import banner from './img/banner.jpg';
+
+export const quranImg = quran;
+export const hisnImg = hisn;
+export const misbahaImg = misbaha;
+export const prayerImg = prayer;
+export const libraryImg = library;
+export const storiesImg = stories;
+export const bannerImg = banner;
