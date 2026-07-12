@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   quranImg, 
   hisnImg, 
@@ -8,8 +8,8 @@ import {
   storiesImg, 
   bannerImg 
 } from '../assets/image-data';
-import { Book, Clock, Heart, CheckCircle2, Bookmark } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Book, Clock, Heart, CheckCircle2, Bookmark, Copy, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { getDailyWird } from '../data/dailyData';
 import { Quote, Sparkles } from 'lucide-react';
 
@@ -19,6 +19,23 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const dailyWird = getDailyWird();
+  const [copiedAyah, setCopiedAyah] = useState(false);
+  const [copiedDhikr, setCopiedDhikr] = useState(false);
+
+  const copyToClipboard = async (text: string, isAyah: boolean) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (isAyah) {
+        setCopiedAyah(true);
+        setTimeout(() => setCopiedAyah(false), 2000);
+      } else {
+        setCopiedDhikr(true);
+        setTimeout(() => setCopiedDhikr(false), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
   const cards = [
     { id: 'quran', title: 'القرآن الكريم', icon: <Book className="w-8 h-8" />, color: 'bg-emerald-500', desc: 'قراءة واستماع', image: quranImg },
     { id: 'hisn', title: 'حصن المسلم', icon: <Heart className="w-8 h-8" />, color: 'bg-teal-500', desc: 'أذكار وأدعية', image: hisnImg },
@@ -56,7 +73,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         </div>
         
         <div className="space-y-4">
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl relative">
+          <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl relative group">
+            <button
+              onClick={() => copyToClipboard(`${dailyWird.ayah.text} - سورة ${dailyWird.ayah.surah}، آية ${dailyWird.ayah.number}`, true)}
+              className="absolute top-3 left-3 p-2 bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 rounded-full text-emerald-600 dark:text-emerald-400 transition-colors shadow-sm"
+              title="نسخ الآية"
+            >
+              {copiedAyah ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </button>
             <Quote className="absolute top-3 right-3 w-5 h-5 text-emerald-200 dark:text-emerald-800/50" />
             <p className="text-emerald-800 dark:text-emerald-300 font-quran text-xl leading-loose text-center px-4 pt-2">
               {dailyWird.ayah.text}
@@ -66,14 +90,21 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </p>
           </div>
           
-          <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+          <div className="flex flex-row items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50 relative">
             <div className="w-10 h-10 shrink-0 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm text-emerald-600">
               <Heart className="w-5 h-5" />
             </div>
-            <div>
+            <div className="flex-1">
               <p className="text-xs text-slate-500 mb-1">ذكر اليوم</p>
               <p className="text-slate-800 dark:text-slate-200 font-medium">{dailyWird.dhikr}</p>
             </div>
+            <button
+              onClick={() => copyToClipboard(dailyWird.dhikr, false)}
+              className="p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 transition-colors shadow-sm"
+              title="نسخ الذكر"
+            >
+              {copiedDhikr ? <Check className="w-4 h-4 text-teal-600" /> : <Copy className="w-4 h-4" />}
+            </button>
           </div>
         </div>
       </motion.div>

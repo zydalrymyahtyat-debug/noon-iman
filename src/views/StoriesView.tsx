@@ -1,11 +1,32 @@
 import React, { useState } from 'react';
-import { Bookmark, ArrowRight, BookOpen } from 'lucide-react';
+import { Bookmark, ArrowRight, BookOpen, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useHardwareBack } from '../hooks/useHardwareBack';
+import { cn } from '../lib/utils';
 
 export const StoriesView: React.FC = () => {
   const [selectedStory, setSelectedStory] = useState<number | null>(null);
+  const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
+
   useHardwareBack(selectedStory !== null, () => setSelectedStory(null));
+
+  const getFontSizeClass = () => {
+    switch (fontSize) {
+      case 'large': return 'text-xl leading-[2.2]';
+      case 'xlarge': return 'text-2xl leading-[2.5]';
+      default: return 'text-lg leading-loose';
+    }
+  };
+
+  const handleZoomIn = () => {
+    if (fontSize === 'normal') setFontSize('large');
+    else if (fontSize === 'large') setFontSize('xlarge');
+  };
+
+  const handleZoomOut = () => {
+    if (fontSize === 'xlarge') setFontSize('large');
+    else if (fontSize === 'large') setFontSize('normal');
+  };
 
   const stories = [
     { 
@@ -114,15 +135,28 @@ export const StoriesView: React.FC = () => {
     const story = stories.find(s => s.id === selectedStory);
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-slate-50 dark:bg-slate-950">
-        <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center gap-4">
-          <button onClick={() => setSelectedStory(null)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-            <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300" />
-          </button>
-          <h2 className="text-xl font-bold font-kufi text-slate-800 dark:text-slate-100">{story?.title}</h2>
+        <div className="relative z-20 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setSelectedStory(null)}
+              className="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <ArrowRight className="w-6 h-6 text-slate-700 dark:text-slate-300 rtl:rotate-180" />
+            </button>
+            <h2 className="font-bold font-kufi text-lg text-slate-800 dark:text-slate-100">{story?.title}</h2>
+          </div>
+          <div className="flex items-center gap-1">
+            <button onClick={handleZoomOut} disabled={fontSize === 'normal'} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-50 text-slate-600 dark:text-slate-300">
+              <ZoomOut className="w-5 h-5" />
+            </button>
+            <button onClick={handleZoomIn} disabled={fontSize === 'xlarge'} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-50 text-slate-600 dark:text-slate-300">
+              <ZoomIn className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-        <div className="p-6 overflow-y-auto pb-24">
+        <div className="flex-1 overflow-y-auto p-6 pb-24 scroll-smooth">
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
-            <p className="text-lg leading-[2.2] text-slate-700 dark:text-slate-300 font-kufi whitespace-pre-wrap text-justify">
+            <p className={cn("font-kufi text-slate-700 dark:text-slate-300 whitespace-pre-wrap transition-all", getFontSizeClass())}>
               {story?.content}
             </p>
           </div>

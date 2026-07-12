@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings, Moon, Bell, Info, Share2 } from 'lucide-react';
+import { Settings, Moon, Bell, Info, Share2, Mail, Code, Heart } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const SettingsView: React.FC = () => {
@@ -63,12 +63,23 @@ export const SettingsView: React.FC = () => {
             <p>
               نسعى إلى تطوير تطبيق نور وإيمان باستمرار وإضافة المزيد من الكتب والمزايا التي تعين المسلم على طلب العلم، وتعزز الوعي الديني بأسلوب سهل ومنظم.
             </p>
-            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-1 text-xs">
-              <p className="font-bold text-slate-800 dark:text-slate-200">تطوير وبرمجة:</p>
-              <p className="text-teal-600 dark:text-teal-400 font-medium">زيد الريمي 770158410</p>
-              <p className="text-amber-600 dark:text-amber-500">لاتنسونا من خالص دعائكم</p>
+            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 text-center space-y-3">
+              <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">تطوير وبرمجة:</p>
+              <p className="text-teal-600 dark:text-teal-400 font-bold text-lg">زيد الريمي</p>
+              <div className="flex items-center justify-center gap-4 text-slate-500 pt-2 pb-2">
+                 <a href="mailto:zaidalrimi@gmail.com" className="p-2 bg-slate-100 dark:bg-slate-800 hover:text-teal-600 transition-colors rounded-full shadow-sm">
+                    <Mail className="w-5 h-5" />
+                 </a>
+                 <a href="#" className="p-2 bg-slate-100 dark:bg-slate-800 hover:text-teal-600 transition-colors rounded-full shadow-sm">
+                    <Code className="w-5 h-5" />
+                 </a>
+              </div>
+              <p className="text-amber-600 dark:text-amber-500 flex items-center justify-center gap-1 text-sm font-medium pt-2">
+                <span>لاتنسونا من خالص دعائكم</span>
+                <Heart className="w-4 h-4 fill-amber-500" />
+              </p>
             </div>
-            <p className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-[10px] text-center opacity-80">
+            <p className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-[10px] text-center opacity-80 leading-relaxed">
               شكرًا لاستخدامكم تطبيق نور وإيمان. نرحب بجميع الملاحظات والاقتراحات التي تسهم في تطوير التطبيق، ونسأل الله أن يجعل هذا العمل خالصًا لوجهه الكريم، وأن ينفع به المسلمين، وأن يجعله في ميزان الحسنات.
             </p>
           </div>
