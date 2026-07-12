@@ -10,12 +10,15 @@ import {
 } from '../assets/image-data';
 import { Book, Clock, Heart, CheckCircle2, Bookmark } from 'lucide-react';
 import { motion } from 'motion/react';
+import { getDailyWird } from '../data/dailyData';
+import { Quote, Sparkles } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (view: string) => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
+  const dailyWird = getDailyWird();
   const cards = [
     { id: 'quran', title: 'القرآن الكريم', icon: <Book className="w-8 h-8" />, color: 'bg-emerald-500', desc: 'قراءة واستماع', image: quranImg },
     { id: 'hisn', title: 'حصن المسلم', icon: <Heart className="w-8 h-8" />, color: 'bg-teal-500', desc: 'أذكار وأدعية', image: hisnImg },
@@ -37,6 +40,41 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
         <div className="relative z-10 p-8 text-white">
           <h2 className="text-3xl font-bold font-kufi mb-3">السلام عليكم</h2>
           <p className="text-teal-50 font-medium text-lg opacity-90 max-w-sm">مرحباً بك في تطبيق نور الإيمان. اختر القسم الذي تريده من القائمة.</p>
+        </div>
+      </motion.div>
+
+      
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700"
+      >
+        <div className="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400">
+          <Sparkles className="w-5 h-5" />
+          <h3 className="font-bold font-kufi">الورد اليومي</h3>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl relative">
+            <Quote className="absolute top-3 right-3 w-5 h-5 text-emerald-200 dark:text-emerald-800/50" />
+            <p className="text-emerald-800 dark:text-emerald-300 font-quran text-xl leading-loose text-center px-4 pt-2">
+              {dailyWird.ayah.text}
+            </p>
+            <p className="text-left text-sm text-emerald-600 dark:text-emerald-500 font-kufi mt-3">
+              - سورة {dailyWird.ayah.surah}، آية {dailyWird.ayah.number}
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+            <div className="w-10 h-10 shrink-0 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm text-emerald-600">
+              <Heart className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs text-slate-500 mb-1">ذكر اليوم</p>
+              <p className="text-slate-800 dark:text-slate-200 font-medium">{dailyWird.dhikr}</p>
+            </div>
+          </div>
         </div>
       </motion.div>
 

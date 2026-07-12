@@ -18,6 +18,7 @@ type View = 'home' | 'quran' | 'misbaha' | 'hisn' | 'stories' | 'library' | 'pra
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [showExitToast, setShowExitToast] = useState(false);
   const exitPromptRef = useRef(false);
 
@@ -33,6 +34,7 @@ const App: React.FC = () => {
       const state = e.state;
       if (state && state.view) {
         setCurrentView(state.view);
+        setIsFullScreen(false);
         exitPromptRef.current = false;
         setShowExitToast(false);
       } else if (state && state.dummy) {
@@ -60,6 +62,7 @@ const App: React.FC = () => {
     if (view !== currentView) {
       window.history.pushState({ view, appInit: true }, '');
       setCurrentView(view);
+      setIsFullScreen(false);
     }
   };
 
@@ -90,16 +93,18 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {!isFullScreen && (
       <header className="h-16 shrink-0 flex items-center justify-between px-4 bg-white dark:bg-slate-900 shadow-sm z-10 relative">
         <h1 className="text-xl font-bold text-teal-600 dark:text-teal-400 font-kufi">نور الإيمان</h1>
         <button onClick={() => navigateTo('settings')} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
       </header>
+      )}
 
       <main className="flex-1 overflow-hidden relative">
         {currentView === 'home' && <HomeView onNavigate={(view) => navigateTo(view as View)} />}
-        {currentView === 'quran' && <QuranView />}
+        {currentView === 'quran' && <QuranView onFullScreenToggle={setIsFullScreen} />}
         {currentView === 'misbaha' && <MisbahaView />}
         {currentView === 'hisn' && <HisnView />}
         {currentView === 'stories' && <StoriesView />}
@@ -108,6 +113,7 @@ const App: React.FC = () => {
         {currentView === 'settings' && <SettingsView />}
       </main>
 
+      {!isFullScreen && (
       <nav className="h-20 shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center justify-around px-1 z-10 pb-4 pt-2 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] overflow-x-auto">
         {navItems.map((item) => (
           <button
@@ -130,6 +136,7 @@ const App: React.FC = () => {
           </button>
         ))}
       </nav>
+      )}
     </div>
   );
 };
