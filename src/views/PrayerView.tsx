@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Moon, Sun, Clock, MapPin, Bell, Loader2 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Coordinates, CalculationMethod, PrayerTimes } from 'adhan';
 import { schedulePrayerReminder, requestNotificationPermissions } from '../lib/notifications';
+import { cn } from '../lib/utils';
 
 export const PrayerView: React.FC = () => {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimes | null>(null);
   const [loading, setLoading] = useState(true);
   const [locationName, setLocationName] = useState('مكة المكرمة (افتراضي)');
   const [notificationStatus, setNotificationStatus] = useState<string | null>(null);
+  const [nextPrayerName, setNextPrayerName] = useState<string | null>(null);
+  const [countdownStr, setCountdownStr] = useState<string>('');
 
   useEffect(() => {
     const calculatePrayers = (lat: number, lng: number) => {
@@ -36,6 +39,56 @@ export const PrayerView: React.FC = () => {
       calculatePrayers(21.3891, 39.8579);
     }
   }, []);
+
+  useEffect(() => {
+    if (!prayerTimes) return;
+
+    const prayers = [
+      { name: 'الفجر', time: prayerTimes.fajr },
+      { name: 'الشروق', time: prayerTimes.sunrise },
+      { name: 'الظهر', time: prayerTimes.dhuhr },
+      { name: 'العصر', time: prayerTimes.asr },
+      { name: 'المغرب', time: prayerTimes.maghrib },
+      { name: 'العشاء', time: prayerTimes.isha },
+    ];
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      let next = prayers.find(p => p.time.getTime() > now);
+
+      if (!next) {
+        // If all prayers today have passed, calculate for tomorrow's Fajr
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        // Approximation for tomorrow's Fajr based on today's
+        const tomorrowFajr = new Date(prayerTimes.fajr);
+        tomorrowFajr.setDate(tomorrowFajr.getDate() + 1);
+        next = { name: 'الفجر (غداً)', time: tomorrowFajr };
+      }
+
+      setNextPrayerName(next.name);
+
+      const diff = next.time.getTime() - now;
+      if (diff > 0) {
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        let formatted = '';
+        if (h > 0) formatted += `${h}س `;
+        if (m > 0 || h > 0) formatted += `${m}د `;
+        formatted += `${s}ث`;
+
+        setCountdownStr(formatted);
+      } else {
+        setCountdownStr('الآن');
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [prayerTimes]);
 
   const handleSetAlarms = async () => {
     if (!prayerTimes) return;
@@ -96,6 +149,8 @@ export const PrayerView: React.FC = () => {
     { name: 'العشاء', time: prayerTimes.isha, icon: <Moon className="w-5 h-5 text-indigo-600" /> },
   ];
 
+  const cleanNextPrayerName = nextPrayerName?.replace(' (غداً)', '');
+
   return (
     <div className="p-4 space-y-6 pb-24 h-full overflow-y-auto">
       <motion.div 
@@ -110,6 +165,21 @@ export const PrayerView: React.FC = () => {
           <p className="text-indigo-100 font-medium">
             {new Intl.DateTimeFormat('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(new Date())}
           </p>
+
+          <AnimatePresence>
+            {nextPrayerName && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mt-6 pt-4 border-t border-white/20 w-full flex flex-col items-center"
+              >
+                <p className="text-indigo-100 mb-1 font-medium">الصلاة القادمة: {nextPrayerName}</p>
+                <div className="text-4xl font-bold font-sans tracking-tight" dir="ltr">
+                  {countdownStr}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -134,25 +204,48 @@ export const PrayerView: React.FC = () => {
       )}
 
       <div className="space-y-3">
-        {prayersList.map((prayer, idx) => (
-          <motion.div
-            key={prayer.name}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="flex items-center justify-between p-5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800">
-                {prayer.icon}
+        {prayersList.map((prayer, idx) => {
+          const isNext = prayer.name === cleanNextPrayerName;
+
+          return (
+            <motion.div
+              key={prayer.name}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className={cn(
+                "flex items-center justify-between p-5 rounded-2xl shadow-sm border transition-all",
+                isNext
+                  ? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800"
+                  : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800"
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-12 h-12 flex items-center justify-center rounded-xl",
+                  isNext ? "bg-white dark:bg-slate-800 shadow-sm" : "bg-slate-50 dark:bg-slate-800"
+                )}>
+                  {prayer.icon}
+                </div>
+                <div>
+                  <span className={cn(
+                    "text-lg font-bold",
+                    isNext ? "text-indigo-700 dark:text-indigo-400" : "text-slate-800 dark:text-slate-100"
+                  )}>{prayer.name}</span>
+                  {isNext && (
+                    <p className="text-xs text-indigo-600 dark:text-indigo-500 font-medium">الصلاة القادمة</p>
+                  )}
+                </div>
               </div>
-              <span className="text-lg font-bold text-slate-800 dark:text-slate-100">{prayer.name}</span>
-            </div>
-            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-bold font-sans text-xl" dir="ltr">
-              {formatTime(prayer.time)}
-            </div>
-          </motion.div>
-        ))}
+              <div className={cn(
+                "flex items-center gap-2 font-bold font-sans text-xl",
+                isNext ? "text-indigo-700 dark:text-indigo-400" : "text-slate-600 dark:text-slate-300"
+              )} dir="ltr">
+                {formatTime(prayer.time)}
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
