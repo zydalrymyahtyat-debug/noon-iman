@@ -1,4 +1,6 @@
+const fs = require('fs');
 
+const content = `
 import React, { useState } from 'react';
 import { Book, Clock, ChevronRight, Bookmark } from 'lucide-react';
 import type { Book as BookType } from '../data/library';
@@ -134,3 +136,6 @@ export const LibraryView: React.FC = () => {
     </div>
   );
 };
+`;
+
+fs.writeFileSync('src/views/LibraryView.tsx', content);

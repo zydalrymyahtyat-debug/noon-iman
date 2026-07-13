@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   quranImg, 
   hisnImg, 
@@ -11,7 +11,7 @@ import {
 import { Book, Clock, Heart, CheckCircle2, Bookmark } from 'lucide-react';
 import { motion } from 'motion/react';
 import { getDailyWird } from '../data/dailyData';
-import { Quote, Sparkles } from 'lucide-react';
+import { Quote, Sparkles, ChevronDown } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (view: string) => void;
@@ -19,6 +19,8 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const dailyWird = getDailyWird();
+  const [isWirdExpanded, setIsWirdExpanded] = useState(false);
+  
   const cards = [
     { id: 'quran', title: 'القرآن الكريم', icon: <Book className="w-8 h-8" />, color: 'bg-emerald-500', desc: 'قراءة واستماع', image: quranImg },
     { id: 'hisn', title: 'حصن المسلم', icon: <Heart className="w-8 h-8" />, color: 'bg-teal-500', desc: 'أذكار وأدعية', image: hisnImg },
@@ -33,47 +35,44 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative rounded-3xl overflow-hidden shadow-lg"
+        className="relative rounded-xl overflow-hidden shadow-sm h-14"
       >
         <img src={bannerImg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90 to-emerald-800/80"></div>
-        <div className="relative z-10 p-8 text-white">
-          <h2 className="text-3xl font-bold font-kufi mb-3">السلام عليكم</h2>
-          <p className="text-teal-50 font-medium text-lg opacity-90 max-w-sm">مرحباً بك في تطبيق نور الإيمان. اختر القسم الذي تريده من القائمة.</p>
+        <div className="relative z-10 px-4 h-full flex items-center justify-between text-white">
+          <h2 className="text-lg font-bold font-kufi shrink-0">السلام عليكم</h2>
+          <p className="text-teal-50 text-xs opacity-90 truncate ms-4">مرحباً بك في نور الإيمان</p>
         </div>
       </motion.div>
-
       
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700"
+        className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 cursor-pointer transition-all active:scale-[0.98]"
+        onClick={() => setIsWirdExpanded(!isWirdExpanded)}
       >
-        <div className="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400">
-          <Sparkles className="w-5 h-5" />
-          <h3 className="font-bold font-kufi">الورد اليومي</h3>
+        <div className="flex items-center justify-between mb-3 text-emerald-600 dark:text-emerald-400">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            <h3 className="font-bold font-kufi text-sm">الورد اليومي</h3>
+          </div>
+          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isWirdExpanded ? 'rotate-180' : ''}`} />
         </div>
         
-        <div className="space-y-4">
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl relative">
-            <Quote className="absolute top-3 right-3 w-5 h-5 text-emerald-200 dark:text-emerald-800/50" />
-            <p className="text-emerald-800 dark:text-emerald-300 font-quran text-xl leading-loose text-center px-4 pt-2">
+        <div className="space-y-2">
+          <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl flex items-start gap-2">
+            <Quote className="w-4 h-4 mt-0.5 text-emerald-400 dark:text-emerald-700 shrink-0" />
+            <p className={`text-emerald-800 dark:text-emerald-300 font-quran text-[13px] flex-1 leading-normal transition-all duration-300 ${isWirdExpanded ? '' : 'line-clamp-1'}`}>
               {dailyWird.ayah.text}
-            </p>
-            <p className="text-left text-sm text-emerald-600 dark:text-emerald-500 font-kufi mt-3">
-              - سورة {dailyWird.ayah.surah}، آية {dailyWird.ayah.number}
             </p>
           </div>
           
-          <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
-            <div className="w-10 h-10 shrink-0 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm text-emerald-600">
-              <Heart className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-xs text-slate-500 mb-1">ذكر اليوم</p>
-              <p className="text-slate-800 dark:text-slate-200 font-medium">{dailyWird.dhikr}</p>
-            </div>
+          <div className="flex items-start gap-2 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50">
+            <Heart className="w-4 h-4 mt-0.5 text-emerald-500 shrink-0" />
+            <p className={`text-slate-800 dark:text-slate-200 font-medium text-[13px] flex-1 leading-normal transition-all duration-300 ${isWirdExpanded ? '' : 'line-clamp-1'}`}>
+              {dailyWird.dhikr}
+            </p>
           </div>
         </div>
       </motion.div>

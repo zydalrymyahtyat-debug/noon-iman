@@ -62,15 +62,15 @@ export const PrayerView: React.FC = () => {
       if (prayer.time.getTime() > now) {
         await schedulePrayerReminder(
           prayer.id,
-          `صلاة \${prayer.name}`,
-          `حان الآن موعد صلاة \${prayer.name}`,
+          `صلاة ${prayer.name}`,
+          `حان الآن موعد صلاة ${prayer.name}`,
           prayer.time
         );
         scheduled++;
       }
     }
 
-    setNotificationStatus(`تم ضبط \${scheduled} منبهات للصلوات القادمة اليوم`);
+    setNotificationStatus(`تم ضبط ${scheduled} منبهات للصلوات القادمة اليوم`);
     setTimeout(() => setNotificationStatus(null), 3000);
   };
 

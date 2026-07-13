@@ -1,13 +1,12 @@
 const https = require('https');
-const q = encodeURIComponent("site:unsplash.com islamic quran");
-https.get(`https://html.duckduckgo.com/html/?q=${q}`, {
-    headers: { 'User-Agent': 'Mozilla/5.0' }
-}, res => {
-    let html = '';
-    res.on('data', d => html+=d);
-    res.on('end', () => {
-        const regex = /https:\/\/images\.unsplash\.com\/photo-[a-zA-Z0-9_-]+/g;
-        const matches = html.match(regex);
-        console.log(matches ? [...new Set(matches)] : 'none');
-    });
+const q = process.argv[2];
+https.get('https://html.duckduckgo.com/html/?q=' + encodeURIComponent(q + ' filetype:jpg'), (res) => {
+  let body = '';
+  res.on('data', d => body += d);
+  res.on('end', () => {
+    const matches = body.match(/img_url=([^&]+)/g);
+    if(matches && matches.length > 0) {
+      console.log(decodeURIComponent(matches[0].replace('img_url=', '')));
+    } else { console.log('no image found'); }
+  });
 });

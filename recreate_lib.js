@@ -1,4 +1,6 @@
+const fs = require('fs');
 
+const content = `
 export type Book = {
   id: string;
   title: string;
@@ -24,7 +26,7 @@ export const books: Book[] = [
     title: 'الداء والدواء',
     author: 'ابن قيم الجوزية',
     description: 'كتاب جامع في فقه النفوس وأمراض القلوب وعلاجها.',
-    content: `
+    content: \`
       <h3 class="text-xl font-bold mb-4 text-teal-700">الفصل الأول: في الدعاء</h3>
       <p class="mb-4">الدعاء من أنفع الأدوية، وهو عدو البلاء، يدافعه ويعالجه، ويمنع نزوله، ويرفعه أو يخففه إذا نزل، وهو سلاح المؤمن. والدعاء مع البلاء له ثلاث مقامات: أحدها: أن يكون أقوى من البلاء فيدفعه. الثاني: أن يكون أضعف من البلاء فيقوى عليه البلاء فيصاب به العبد، ولكن قد يخففه وإن كان ضعيفاً. الثالث: أن يتقاوما ويمنع كل واحد منهما صاحبه.</p>
       
@@ -33,14 +35,14 @@ export const books: Book[] = [
 
       <h3 class="text-xl font-bold mb-4 text-teal-700">الفصل الثالث: في آثار المعاصي</h3>
       <p class="mb-4">ومن عقوبات الذنوب أنها تزيل النعم وتحل النقم، فما زالت عن العبد نعمة إلا بذنب، ولا حلت به نقمة إلا بذنب، كما قال علي بن أبي طالب رضي الله عنه: ما نزل بلاء إلا بذنب، ولا رفع إلا بتوبة.</p>
-    `
+    \`
   },
   {
     id: 'surah-info',
     title: 'فضائل السور',
     author: 'جمع وترتيب',
     description: 'معلومات وتعريفات تساعد على التعرف على السور وفضلها.',
-    content: `
+    content: \`
       <h3 class="text-xl font-bold mb-4 text-teal-700">سورة الفاتحة</h3>
       <p class="mb-4">هي أعظم سورة في القرآن، وهي السبع المثاني والقرآن العظيم، وهي رقية للمريض، ولم ينزل في التوراة ولا في الإنجيل ولا في الزبور مثلها.</p>
       
@@ -55,7 +57,7 @@ export const books: Book[] = [
 
       <h3 class="text-xl font-bold mb-4 text-teal-700">سورة الإخلاص</h3>
       <p class="mb-4">تعدل ثلث القرآن، وفيها صفة الرحمن جل جلاله، ومحبتها توجب محبة الله ودخول الجنة.</p>
-    `
+    \`
   },
   {
     id: 'bukhari',
@@ -63,7 +65,7 @@ export const books: Book[] = [
     author: 'الإمام محمد بن إسماعيل البخاري',
     description: 'أصح كتاب بعد كتاب الله تعالى، جامع للأحاديث الصحيحة الواردة عن النبي صلى الله عليه وسلم.',
     content: 'يتم تحميل الكتاب كاملًا من قاعدة البيانات...',
-    sourceUrl: '/books_json/bukhari_full.json',
+    sourceUrl: '/books/bukhari.json',
     type: 'json'
   },
   {
@@ -71,45 +73,45 @@ export const books: Book[] = [
     title: 'كتاب الروح',
     author: 'ابن قيم الجوزية',
     description: 'في الكلام على أرواح الأموات والأحياء بالدلائل من الكتاب والسنة.',
-    content: '',
-    sourceUrl: '/books_json/ruh.json',
-    type: 'json'
+    content: 'يتم تحميل الكتاب كاملًا...',
+    sourceUrl: '/books/ruh.txt',
+    type: 'text'
   },
   {
     id: 'sayd-khatir',
     title: 'صيد الخاطر',
     author: 'ابن الجوزي',
     description: 'كتاب يضم تأملات وخواطر في النفس والدين والحياة، صنف فيه ابن الجوزي ما كان يخطر بباله.',
-    content: '',
-    sourceUrl: '/books_json/sayd-khatir.json',
-    type: 'json'
+    content: 'يتم تحميل الكتاب كاملًا...',
+    sourceUrl: '/books/sayd.txt',
+    type: 'text'
   },
   {
     id: 'sirah',
     title: 'السيرة النبوية',
     author: 'ابن هشام',
     description: 'من أهم مصادر السيرة النبوية، هذب فيه ابن هشام سيرة ابن إسحاق.',
-    content: '',
-    sourceUrl: '/books_json/sirah.json',
-    type: 'json'
+    content: 'يتم تحميل الكتاب كاملًا...',
+    sourceUrl: '/books/sirah.txt',
+    type: 'text'
   },
   {
     id: 'rasael-quran',
     title: 'رسائل من القرآن الكريم',
     author: 'أدهم الشرقاوي',
-    description: 'تأملات وخواطر إيمانية مستوحاة من آيات القرآن الكريم.',
-    content: '',
-    sourceUrl: '/books_json/rasael-quran.json',
-    type: 'json'
+    description: 'تأملات وخواطر إيمانية مستوحاة من آيات القرآن الكريم. (حقوق الطبع والنشر محفوظة للمؤلف دار كلمات)',
+    content: 'يتم تحميل الكتاب كاملًا...',
+    sourceUrl: '/books/rasael-quran.txt',
+    type: 'text'
   },
   {
     id: 'rasael-nabi',
     title: 'رسائل من النبي صلى الله عليه وسلم',
     author: 'أدهم الشرقاوي',
-    description: 'مواقف وعبر من السيرة النبوية الشريفة مصاغة بأسلوب أدبي.',
-    content: '',
-    sourceUrl: '/books_json/rasael-nabi.json',
-    type: 'json'
+    description: 'مواقف وعبر من السيرة النبوية الشريفة مصاغة بأسلوب أدبي. (حقوق الطبع والنشر محفوظة للمؤلف دار كلمات)',
+    content: 'يتم تحميل الكتاب كاملًا...',
+    sourceUrl: '/books/rasael-nabi.txt',
+    type: 'text'
   }
 ];
 
@@ -145,3 +147,6 @@ export const signsOfHour = [
     ]
   }
 ];
+`;
+
+fs.writeFileSync('src/data/library.ts', content);

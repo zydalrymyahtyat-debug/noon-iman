@@ -54,7 +54,6 @@ export const SettingsView: React.FC = () => {
             </p>
             <ul className="list-disc list-inside space-y-1 pe-2 text-xs">
               <li>القرآن الكريم.</li>
-              <li>كتاب الأصول الثلاثة.</li>
               <li>كتاب الأربعين النووية.</li>
               <li>كتاب الداء والدواء.</li>
               <li>قسم علامات الساعة.</li>
