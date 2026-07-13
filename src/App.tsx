@@ -12,7 +12,6 @@ import { StoriesView } from './views/StoriesView';
 import { LibraryView } from './views/LibraryView';
 import { PrayerView } from './views/PrayerView';
 import { SettingsView } from './views/SettingsView';
-import { WeeklyDialog } from './components/WeeklyDialog';
 
 type View = 'home' | 'quran' | 'misbaha' | 'hisn' | 'stories' | 'library' | 'prayer' | 'settings';
 
@@ -78,8 +77,6 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-50 overflow-hidden" dir="rtl">
-      <WeeklyDialog />
-      
       <AnimatePresence>
         {showExitToast && (
           <motion.div
