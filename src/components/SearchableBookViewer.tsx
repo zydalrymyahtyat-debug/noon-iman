@@ -40,10 +40,11 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
         if (isBukhari && json.hadiths) {
           // Map Bukhari format
           const mapped = json.hadiths.map((h: any) => {
-            const title = `حديث رقم ${h.id}`;
+            const hId = h.id || h.hadithnumber;
+            const title = `حديث رقم ${hId}`;
             const content = h.arabic || h.text || '';
             return {
-              id: h.id,
+              id: hId,
               title: title,
               content: content,
               normTitle: normalizeArabic(title).toLowerCase(),

@@ -226,7 +226,7 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
   if (currentPage !== null) {
     const firstAyah = pageAyahs[0];
     const headerJuz = firstAyah ? firstAyah.juz : '';
-    const headerSurah = firstAyah ? firstAyah.surahName.replace('سُورَةُ', '').trim() : '';
+    const headerSurah = firstAyah && firstAyah.surahName ? firstAyah.surahName.replace('سُورَةُ', '').trim() : '';
 
     return (
       <div 
@@ -299,7 +299,7 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                         <div className="w-full flex flex-col items-center my-4">
                           <div className="w-[90%] sm:w-[80%] h-14 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] bg-[#f1f5f9] dark:bg-[#0f172a] border border-[#cbd5e1] dark:border-[#334155] rounded-md flex items-center justify-between px-4 shadow-sm mb-3 overflow-hidden relative">
                              <div className="absolute inset-0 opacity-10 bg-emerald-700 mix-blend-multiply"></div>
-                             <span className="font-quran text-lg sm:text-xl text-slate-800 dark:text-slate-200 relative z-10 flex-1 text-right">سُورَةُ {firstAyah.surahName.replace('سُورَةُ', '').trim()}</span>
+                             <span className="font-quran text-lg sm:text-xl text-slate-800 dark:text-slate-200 relative z-10 flex-1 text-right">سُورَةُ {firstAyah && firstAyah.surahName ? firstAyah.surahName.replace('سُورَةُ', '').trim() : ''}</span>
                              <span className="font-quran text-base sm:text-lg text-slate-700 dark:text-slate-400 relative z-10 flex-1 text-left">آياتها {surahRef?.numberOfAyahs ? toArabicNumeral(surahRef.numberOfAyahs) : ''}</span>
                           </div>
                           {surahNum !== 9 && surahNum !== 1 && (
@@ -376,7 +376,7 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                       <BookOpen className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-kufi font-bold text-lg">{selectedTafsir.surahName.replace('سُورَةُ', '')}</h3>
+                      <h3 className="font-kufi font-bold text-lg">{(selectedTafsir.surahName || '').replace('سُورَةُ', '')}</h3>
                       <p className="font-sans text-sm opacity-80">الآية {toArabicNumeral(selectedTafsir.ayahNumber)}</p>
                     </div>
                   </div>
@@ -428,8 +428,8 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                 </div>
                 <div className="text-right">
                   <p className="text-emerald-50 text-sm font-medium mb-1">متابعة القراءة</p>
-                  <h3 className="text-xl font-bold font-kufi mb-1">{bookmark.surahName.replace('سُورَةُ', '')}</h3>
-                  <p className="text-emerald-100 text-xs font-kufi">صفحة {toArabicNumeral(bookmark.page)} • الآية {toArabicNumeral(bookmark.ayahNumber)}</p>
+                  <h3 className="text-xl font-bold font-kufi mb-1">{(bookmark.surahName || '').replace('سُورَةُ', '')}</h3>
+                  <p className="text-emerald-100 text-xs font-kufi">صفحة {toArabicNumeral(bookmark.page || 1)} {bookmark.ayahNumber ? `• الآية ${toArabicNumeral(bookmark.ayahNumber)}` : ''}</p>
                 </div>
               </div>
               <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
@@ -454,7 +454,7 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                   <span className="relative z-10 font-sans text-lg">{toArabicNumeral(surah.number)}</span>
                 </div>
                 <div>
-                  <h3 className="font-kufi font-bold text-slate-800 dark:text-slate-100 text-lg mb-1">{surah.name.replace('سُورَةُ', '')}</h3>
+                  <h3 className="font-kufi font-bold text-slate-800 dark:text-slate-100 text-lg mb-1">{(surah.name || '').replace('سُورَةُ', '')}</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 font-kufi">
                     {surah.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} • صفحة {toArabicNumeral(startPages[index])}
                   </p>
