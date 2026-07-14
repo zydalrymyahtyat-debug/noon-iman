@@ -1,6 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
+
+
+const normalizeArabic = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/[\u0617-\u061A\u064B-\u0652]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي");
+};
 
 interface SearchableBookViewerProps {
   url?: string;
@@ -11,6 +21,7 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   
   React.useEffect(() => {
     if (!url) return;
@@ -47,13 +58,13 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
   }, [url, isBukhari]);
 
   const filteredData = useMemo(() => {
-    if (!searchQuery.trim()) return data;
-    const q = searchQuery.toLowerCase();
+    if (!deferredSearchQuery.trim()) return data;
+    const q = normalizeArabic(deferredSearchQuery).toLowerCase();
     return data.filter(item => 
-      (item.title && item.title.toLowerCase().includes(q)) || 
-      (item.content && item.content.toLowerCase().includes(q))
+      (item.title && normalizeArabic(item.title).toLowerCase().includes(q)) || 
+      (item.content && normalizeArabic(item.content).toLowerCase().includes(q))
     );
-  }, [data, searchQuery]);
+  }, [data, deferredSearchQuery]);
 
   if (loading) {
     return (
