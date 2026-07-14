@@ -2,7 +2,6 @@ import React, { useState, useMemo, useDeferredValue } from 'react';
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 
-
 const normalizeArabic = (text: string) => {
   if (!text) return "";
   return text
@@ -21,38 +20,61 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(false);
   const deferredSearchQuery = useDeferredValue(searchQuery);
   
   React.useEffect(() => {
     if (!url) return;
     setLoading(true);
-    fetch(url)
-      .then(res => res.json())
+    setError(false);
+    
+    // Append a timestamp query parameter to bypass browser caching for updated JSON files
+    const noCacheUrl = `${url}?t=${new Date().getTime()}`;
+    
+    fetch(noCacheUrl)
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      })
       .then(json => {
         if (isBukhari && json.hadiths) {
           // Map Bukhari format
-          const mapped = json.hadiths.map((h: any) => ({
-            id: h.id,
-            title: `حديث رقم ${h.id}`,
-            content: h.arabic || h.text
-          }));
+          const mapped = json.hadiths.map((h: any) => {
+            const title = `حديث رقم ${h.id}`;
+            const content = h.arabic || h.text || '';
+            return {
+              id: h.id,
+              title: title,
+              content: content,
+              normTitle: normalizeArabic(title).toLowerCase(),
+              normContent: normalizeArabic(content).toLowerCase()
+            };
+          });
           setData(mapped);
         } else if (json.chapters) {
           // Map chapters format
-          const mapped = json.chapters.map((c: any, idx: number) => ({
-            id: idx,
-            title: c.title,
-            content: c.content
-          }));
+          const mapped = json.chapters.map((c: any, idx: number) => {
+            const title = c.title || '';
+            const content = c.content || '';
+            return {
+              id: idx,
+              title: title,
+              content: content,
+              normTitle: normalizeArabic(title).toLowerCase(),
+              normContent: normalizeArabic(content).toLowerCase()
+            };
+          });
           setData(mapped);
         } else {
           // Fallback
           setData([]);
+          setError(true);
         }
         setLoading(false);
       })
       .catch(e => {
         console.error(e);
+        setError(true);
         setLoading(false);
       });
   }, [url, isBukhari]);
@@ -61,8 +83,8 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
     if (!deferredSearchQuery.trim()) return data;
     const q = normalizeArabic(deferredSearchQuery).toLowerCase();
     return data.filter(item => 
-      (item.title && normalizeArabic(item.title).toLowerCase().includes(q)) || 
-      (item.content && normalizeArabic(item.content).toLowerCase().includes(q))
+       (item.normTitle && item.normTitle.includes(q)) || 
+       (item.normContent && item.normContent.includes(q))
     );
   }, [data, deferredSearchQuery]);
 
@@ -75,13 +97,12 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
     );
   }
 
-  if (data.length === 0) {
+  if (error || data.length === 0) {
     return <div className="p-10 text-center text-red-500 font-kufi">حدث خطأ أثناء التحميل أو الكتاب فارغ</div>;
   }
 
-  // Virtualization is needed if we render 7000 hadiths, but standard DOM can handle 100-200 easily.
-  // We'll limit to 100 initially, or maybe 200, to prevent freezing on mobile.
-  const displayLimit = 150;
+  // Limit display to prevent freezing
+  const displayLimit = 100;
   const displayed = filteredData.slice(0, displayLimit);
 
   return (
