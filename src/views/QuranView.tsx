@@ -90,16 +90,13 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
     fetchMeta();
   }, []);
 
-  useHardwareBack(() => {
+  useHardwareBack(currentPage !== null, () => {
     if (selectedTafsir) {
       setSelectedTafsir(null);
-      return true;
-    }
-    if (currentPage !== null) {
+      window.history.pushState({ layer: true, appInit: true }, '');
+    } else {
       setCurrentPage(null);
-      return true;
     }
-    return false;
   });
 
   const loadPage = async (p: number) => {
@@ -181,6 +178,43 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
     return text;
   };
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef(0);
+  const touchEndY = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndY.current = e.targetTouches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    
+    // Check if we are at the bottom
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 20;
+    
+    // Swipe up
+    if (isAtBottom && touchStartY.current - touchEndY.current > 60) {
+      if (currentPage < 604) {
+        loadPage(currentPage + 1);
+      }
+    }
+    
+    // Check if we are at the top
+    const isAtTop = scrollTop <= 20;
+    
+    // Swipe down
+    if (isAtTop && touchEndY.current - touchStartY.current > 60) {
+      if (currentPage > 1) {
+        loadPage(currentPage - 1);
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -195,7 +229,14 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
     const headerSurah = firstAyah ? firstAyah.surahName.replace('سُورَةُ', '').trim() : '';
 
     return (
-      <div className="h-full w-full bg-[#f8fafc] dark:bg-[#0f172a] flex flex-col items-center overflow-y-auto" dir="rtl">
+      <div 
+        ref={scrollContainerRef}
+        className="h-full w-full bg-[#f8fafc] dark:bg-[#0f172a] flex flex-col items-center overflow-y-auto" 
+        dir="rtl"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="w-full max-w-3xl flex items-center justify-between p-4 sticky top-0 z-10 bg-[#f8fafc]/90 dark:bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
           <button
             onClick={() => setCurrentPage(null)}
@@ -256,10 +297,10 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                     <div key={surahNum} className="w-full flex flex-col items-center mb-2">
                       {isSurahStart && (
                         <div className="w-full flex flex-col items-center my-4">
-                          <div className="w-full max-w-[80%] h-12 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] bg-[#f1f5f9] dark:bg-[#0f172a] border border-[#cbd5e1] dark:border-[#334155] rounded flex items-center justify-between px-6 shadow-sm mb-3 overflow-hidden relative">
+                          <div className="w-[90%] sm:w-[80%] h-14 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] bg-[#f1f5f9] dark:bg-[#0f172a] border border-[#cbd5e1] dark:border-[#334155] rounded-md flex items-center justify-between px-4 shadow-sm mb-3 overflow-hidden relative">
                              <div className="absolute inset-0 opacity-10 bg-emerald-700 mix-blend-multiply"></div>
-                             <span className="font-quran text-xl sm:text-2xl text-slate-800 dark:text-slate-200 relative z-10">سُورَةُ {firstAyah.surahName.replace('سُورَةُ', '')}</span>
-                             <span className="font-quran text-lg sm:text-xl text-slate-700 dark:text-slate-400 relative z-10">آياتها {surahRef?.numberOfAyahs ? toArabicNumeral(surahRef.numberOfAyahs) : ''}</span>
+                             <span className="font-quran text-lg sm:text-xl text-slate-800 dark:text-slate-200 relative z-10 flex-1 text-right">سُورَةُ {firstAyah.surahName.replace('سُورَةُ', '').trim()}</span>
+                             <span className="font-quran text-base sm:text-lg text-slate-700 dark:text-slate-400 relative z-10 flex-1 text-left">آياتها {surahRef?.numberOfAyahs ? toArabicNumeral(surahRef.numberOfAyahs) : ''}</span>
                           </div>
                           {surahNum !== 9 && surahNum !== 1 && (
                             <div className="font-quran text-[26px] sm:text-[30px] text-slate-800 dark:text-slate-100 my-2">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
@@ -292,9 +333,9 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                                 )}
                               >
                                 {stripBismillah(ayah.text, ayah.surahNumber, ayah.numberInSurah)}
-                                <span className="inline-flex items-center justify-center text-emerald-800 dark:text-emerald-400 font-sans text-[15px] sm:text-[17px] mx-1.5 translate-y-[-0.1em] relative">
-                                  <span className="opacity-40 select-none text-[28px] sm:text-[32px] absolute inset-0 flex items-center justify-center font-quran">۝</span>
-                                  <span className="relative z-10 pt-1">{toArabicNumeral(ayah.numberInSurah)}</span>
+                                <span className="inline-flex items-center justify-center text-emerald-800 dark:text-emerald-400 font-sans mx-1 relative w-[2.5em] h-[2.5em] align-middle translate-y-[-0.15em]">
+                                  <span className="opacity-50 select-none text-[36px] sm:text-[40px] absolute inset-0 flex items-center justify-center font-quran font-normal" style={{lineHeight: 1}}>۝</span>
+                                  <span className="relative z-10 pt-1.5 text-[15px] sm:text-[17px] font-bold text-slate-700 dark:text-slate-300">{toArabicNumeral(ayah.numberInSurah)}</span>
                                 </span>
                               </span>
                             </React.Fragment>

@@ -28,8 +28,8 @@ export const SearchableBookViewer: React.FC<SearchableBookViewerProps> = ({ url,
     setLoading(true);
     setError(false);
     
-    // Append a timestamp query parameter to bypass browser caching for updated JSON files
-    const noCacheUrl = `${url}?t=${new Date().getTime()}`;
+    // Use exact URL so Capacitor/local filesystem can find it offline
+    const noCacheUrl = url;
     
     fetch(noCacheUrl)
       .then(res => {

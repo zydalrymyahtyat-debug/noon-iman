@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+window.history.pushState({id: 1}, '');
+console.log('pushed 1');
+window.history.back();
+console.log('called back');
+window.history.pushState({id: 2}, '');
+console.log('pushed 2');
+window.addEventListener('popstate', (e) => {
+  console.log('popstate', e.state);
+});
+</script>
+</body>
+</html>
