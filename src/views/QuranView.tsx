@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, ArrowRight, ArrowLeft, Loader2, Bookmark as BookmarkIcon, BookmarkCheck, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
@@ -21,7 +21,8 @@ interface Ayah {
   surahName: string;
 }
 
-const toArabicNumeral = (n: number) => {
+const toArabicNumeral = (n: number | string | undefined | null) => {
+  if (n === undefined || n === null) return '';
   return n.toString().replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[parseInt(d)]);
 };
 
@@ -171,6 +172,7 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
   };
 
   const stripBismillah = (text: string, surahNum: number, ayahNum: number) => {
+    if (!text) return '';
     if (surahNum === 1) return text;
     if (ayahNum === 1) {
       return text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ', '').replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', '');
@@ -333,9 +335,16 @@ export const QuranView: React.FC<QuranViewProps> = ({ onFullScreenToggle }) => {
                                 )}
                               >
                                 {stripBismillah(ayah.text, ayah.surahNumber, ayah.numberInSurah)}
-                                <span className="inline-flex items-center justify-center text-emerald-800 dark:text-emerald-400 font-sans mx-1 relative w-[2.5em] h-[2.5em] align-middle translate-y-[-0.15em]">
-                                  <span className="opacity-50 select-none text-[36px] sm:text-[40px] absolute inset-0 flex items-center justify-center font-quran font-normal" style={{lineHeight: 1}}>۝</span>
-                                  <span className="relative z-10 pt-1.5 text-[15px] sm:text-[17px] font-bold text-slate-700 dark:text-slate-300">{toArabicNumeral(ayah.numberInSurah)}</span>
+                                <span className="relative inline-flex items-center justify-center w-[2.2em] h-[2.2em] mx-1 align-middle">
+                                  <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full text-emerald-600/40 dark:text-emerald-400/40 pointer-events-none">
+                                    <circle cx="50" cy="50" r="35" stroke="currentColor" strokeWidth="4" fill="none" opacity="0.8"/>
+                                    <circle cx="50" cy="50" r="42" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" fill="none" opacity="0.6"/>
+                                    <circle cx="50" cy="5" r="4" fill="currentColor" opacity="0.7"/>
+                                    <circle cx="50" cy="95" r="4" fill="currentColor" opacity="0.7"/>
+                                    <circle cx="95" cy="50" r="4" fill="currentColor" opacity="0.7"/>
+                                    <circle cx="5" cy="50" r="4" fill="currentColor" opacity="0.7"/>
+                                  </svg>
+                                  <span className="absolute inset-0 flex items-center justify-center text-[0.8em] font-sans font-bold text-slate-800 dark:text-slate-200 select-none pointer-events-none" style={{ paddingTop: '0.15em' }}>{toArabicNumeral(ayah.numberInSurah)}</span>
                                 </span>
                               </span>
                             </React.Fragment>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'KFGQPCHafs';
+    src: url('./public/assets/fonts/hafs.ttf') format('truetype');
+  }
+  .ayah-marker {
+    display: inline-flex;
+    position: relative;
+    width: 2.2em;
+    height: 2.2em;
+    vertical-align: middle;
+    margin: 0 0.2em;
+    align-items: center;
+    justify-content: center;
+  }
+  .ayah-symbol {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif; /* System font instead of Hafs */
+    font-size: 2em;
+    color: rgba(4, 120, 87, 0.4);
+    line-height: 1;
+  }
+  .ayah-num {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #1e293b;
+    padding-top: 0.15em;
+  }
+</style>
+</head>
+<body style="font-size: 40px; direction: rtl; text-align: center; font-family: 'KFGQPCHafs', serif;">
+  بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+  <span class="ayah-marker">
+    <span class="ayah-symbol">۝</span>
+    <span class="ayah-num">١٢٣</span>
+  </span>
+  الْحَمْدُ لِلَّهِ
+</body>
+</html>
