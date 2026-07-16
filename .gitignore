@@ -1,2 +1,5 @@
 node_modules
 dist
+public/books/bukhari.json
+public/books_json
+public/books
