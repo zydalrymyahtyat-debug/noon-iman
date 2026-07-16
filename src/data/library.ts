@@ -63,7 +63,7 @@ export const books: Book[] = [
     author: 'الإمام محمد بن إسماعيل البخاري',
     description: 'أصح كتاب بعد كتاب الله تعالى، جامع للأحاديث الصحيحة الواردة عن النبي صلى الله عليه وسلم.',
     content: 'يتم تحميل الكتاب كاملًا من قاعدة البيانات...',
-    sourceUrl: 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari.json',
+    sourceUrl: '/books/bukhari.json',
     type: 'json'
   },
   {
