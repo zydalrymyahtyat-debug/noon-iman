@@ -72,7 +72,7 @@ export const books: Book[] = [
     author: 'ابن قيم الجوزية',
     description: 'في الكلام على أرواح الأموات والأحياء بالدلائل من الكتاب والسنة.',
     content: '',
-    sourceUrl: '/books_json/ruh.json',
+    sourceUrl: '/books/ruh.json',
     type: 'json'
   },
   {
@@ -81,7 +81,7 @@ export const books: Book[] = [
     author: 'ابن الجوزي',
     description: 'كتاب يضم تأملات وخواطر في النفس والدين والحياة، صنف فيه ابن الجوزي ما كان يخطر بباله.',
     content: '',
-    sourceUrl: '/books_json/sayd-khatir.json',
+    sourceUrl: '/books/sayd-khatir.json',
     type: 'json'
   },
   {
@@ -90,7 +90,7 @@ export const books: Book[] = [
     author: 'ابن هشام',
     description: 'من أهم مصادر السيرة النبوية، هذب فيه ابن هشام سيرة ابن إسحاق.',
     content: '',
-    sourceUrl: '/books_json/sirah.json',
+    sourceUrl: '/books/sirah.json',
     type: 'json'
   },
   {
@@ -99,7 +99,7 @@ export const books: Book[] = [
     author: 'أدهم الشرقاوي',
     description: 'تأملات وخواطر إيمانية مستوحاة من آيات القرآن الكريم.',
     content: '',
-    sourceUrl: '/books_json/rasael-quran.json',
+    sourceUrl: '/books/rasael-quran.json',
     type: 'json'
   },
   {
@@ -108,7 +108,7 @@ export const books: Book[] = [
     author: 'أدهم الشرقاوي',
     description: 'مواقف وعبر من السيرة النبوية الشريفة مصاغة بأسلوب أدبي.',
     content: '',
-    sourceUrl: '/books_json/rasael-nabi.json',
+    sourceUrl: '/books/rasael-nabi.json',
     type: 'json'
   }
 ];
