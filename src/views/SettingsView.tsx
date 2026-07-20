@@ -56,12 +56,18 @@ export const SettingsView: React.FC = () => {
               <li>القرآن الكريم.</li>
               <li>كتاب الأربعين النووية.</li>
               <li>كتاب الداء والدواء.</li>
+              <li>صحيح البخاري.</li>
               <li>قسم علامات الساعة.</li>
               <li>معلومات وفوائد إسلامية متنوعة.</li>
             </ul>
             <p>
               نسعى إلى تطوير تطبيق نور وإيمان باستمرار وإضافة المزيد من الكتب والمزايا التي تعين المسلم على طلب العلم، وتعزز الوعي الديني بأسلوب سهل ومنظم.
             </p>
+                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-1 text-sm font-medium">
+              <h4 className="text-teal-700 dark:text-teal-400 font-bold mb-2 text-lg">بدعم من فاعلة خير</h4>
+              <p>هذا التطبيق تم بفضل الله، ثم بدعم وتمويل من فاعلة خير أحبت يكون لها أثر طيب ينفع الناس.</p>
+              <p>نسأل الله أن يتقبل منها، ويجعل هذا العمل صدقة جارية في ميزان حسناتها، ويكتب الأجر لكل من استفاد من التطبيق.</p>
+            </div>
             <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-1 text-xs">
               <p className="font-bold text-slate-800 dark:text-slate-200">تطوير وبرمجة:</p>
               <p className="text-teal-600 dark:text-teal-400 font-medium">زيد الريمي 770158410</p>
